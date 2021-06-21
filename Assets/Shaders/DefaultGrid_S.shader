@@ -1,6 +1,3 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
 Shader "Unlit/DefaultGrid_S"
 {
     Properties
@@ -42,7 +39,7 @@ Shader "Unlit/DefaultGrid_S"
                 // Gets the xy position of the vertex in worldspace.
                 float2 worldXY = mul(unity_ObjectToWorld, v.vertex).xy;
                 // Use the worldspace coords instead of the mesh's UVs.
-                o.uv = TRANSFORM_TEX(worldXY, _MainTex);
+                o.uv = TRANSFORM_TEX(worldXY, _MainTex);                
     
                 return o;
             }
