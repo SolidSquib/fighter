@@ -556,9 +556,10 @@ GameObject:
   - component: {fileID: 1408083820}
   - component: {fileID: 1408083822}
   - component: {fileID: 1408083821}
+  - component: {fileID: 1408083823}
   m_Layer: 0
   m_Name: PlayerCharacter
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -623,7 +624,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: 4eea985d90c140042a8a44a20c67f633,
     type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -659,6 +660,18 @@ MonoBehaviour:
   fallWeight: 8
   jumpWeight: 8
   jumpVelocity: 25
+--- !u!114 &1408083823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408083817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3be4e953d1347ea48a8f39e843ce4605, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1986510227
 GameObject:
   m_ObjectHideFlags: 0

@@ -217,6 +217,6 @@ public class PlayerCharacter : MonoBehaviour
 
 	public void OnLightAttack()
 	{
-
+		mAnimator.Play("Attack_Light1");
 	}
 }
