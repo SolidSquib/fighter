@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27db45c19c19b0b46987a35d1b486c5e, type: 3}
   m_Name: OrientationControl_2D
   m_EditorClassIdentifier: 
-  allowedMovementStates: []
+  allowedMovementStates:
+  - {fileID: 11400000, guid: e6398ebff0d8d554f939e69beb50d1f1, type: 2}
