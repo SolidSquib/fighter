@@ -555,8 +555,8 @@ GameObject:
   - component: {fileID: 1408083819}
   - component: {fileID: 1408083820}
   - component: {fileID: 1408083822}
+  - component: {fileID: 1408083824}
   - component: {fileID: 1408083821}
-  - component: {fileID: 1408083823}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -660,7 +660,7 @@ MonoBehaviour:
   fallWeight: 8
   jumpWeight: 8
   jumpVelocity: 25
---- !u!114 &1408083823
+--- !u!114 &1408083824
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -669,9 +669,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1408083817}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3be4e953d1347ea48a8f39e843ce4605, type: 3}
+  m_Script: {fileID: 11500000, guid: 9718c59a6f22abc48b1eb518cd1a925b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startupAbilities:
+  - ability: {fileID: 11400000, guid: d20eb271e4853314d935d672eb2324d2, type: 2}
+    inputActionBinding: Jump
+    removalPolicy: 0
 --- !u!1 &1986510227
 GameObject:
   m_ObjectHideFlags: 0

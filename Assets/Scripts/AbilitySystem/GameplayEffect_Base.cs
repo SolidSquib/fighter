@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameplayEffect_Base : MonoBehaviour
+public abstract class GameplayEffect_Base : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public enum EEffectDurationPolicy { Instant, Infinite, Duration }
+    
+    public TagContainer effectTags = new TagContainer();
+    public TagContainer grantedTags = new TagContainer();
+    
 }

@@ -19,4 +19,11 @@ namespace Fighter.Types
             return value.Get();
         }
     }
+
+    [Serializable]
+    public struct TagRequirementsContainer
+    {
+        public TagContainer Required;
+        public TagContainer Ignored;
+    }
 }
