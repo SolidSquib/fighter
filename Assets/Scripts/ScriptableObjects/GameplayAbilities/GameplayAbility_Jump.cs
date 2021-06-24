@@ -13,4 +13,10 @@ public class GameplayAbility_Jump : GameplayAbility_Base
             playerCharacter.HandleJump();
         }
     }
+
+    public override bool CanActivateAbility()
+    {
+        PlayerCharacter playerCharacter = abilitySystem.avatar.GetComponent<PlayerCharacter>();
+        return playerCharacter.CanJump();
+    }
 }

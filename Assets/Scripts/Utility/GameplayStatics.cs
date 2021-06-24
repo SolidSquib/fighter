@@ -23,5 +23,31 @@ namespace Fighter
 
             return inputVector;
         }
+
+        public static bool TraceForGroundUnderneath(PlayerMovement playerMovement, int groundLayerMask)
+        {
+            if (playerMovement == null)
+            {
+                Debug.LogWarning($"Unable to trace for ground underneath a null PlayerMovement object.");
+                return false;
+            }
+
+            const float traceRadius = 0.1f;
+            float capsuleHalfHeight = Mathf.Max(playerMovement.playerCapsule.radius, playerMovement.playerCapsule.height * 0.5f);
+            Vector3 traceStart = playerMovement.transform.position;
+            traceStart.y -= capsuleHalfHeight + traceRadius;
+            Vector3 traceEnd = new Vector3(traceStart.x, traceStart.y - traceRadius, traceStart.z);
+
+            Debug.DrawLine(traceStart, traceEnd, Color.red, 0);
+
+            if (groundLayerMask != 0)
+            {
+                return Physics.CheckSphere(traceStart, traceRadius, groundLayerMask);
+            }
+            else
+            {
+                return Physics.CheckSphere(traceStart, traceRadius);
+            }
+        }
     }
 }
