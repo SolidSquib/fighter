@@ -26,7 +26,7 @@ namespace Fighter
 
         public static bool TraceForGroundUnderneath(PlayerMovement playerMovement, int groundLayerMask)
         {
-            if (playerMovement == null)
+            /* if (playerMovement == null)
             {
                 Debug.LogWarning($"Unable to trace for ground underneath a null PlayerMovement object.");
                 return false;
@@ -37,7 +37,7 @@ namespace Fighter
             Vector3 traceStart = playerMovement.transform.position;
             traceStart.y -= (capsuleHalfHeight - traceRadius);
             
-            DebugExtension.DebugWireSphere(traceStart, Color.red, traceRadius);
+            //DebugExtension.DebugWireSphere(traceStart, Color.red, traceRadius);
 
             if (groundLayerMask != 0)
             {
@@ -46,7 +46,9 @@ namespace Fighter
             else
             {
                 return Physics.CheckSphere(traceStart, traceRadius);
-            }
+            } */
+
+            return false;
         }
     }
 }

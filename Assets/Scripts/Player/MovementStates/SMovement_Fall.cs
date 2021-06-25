@@ -5,45 +5,62 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player Movement/Movement State/Defaults/Fall")]
 public class SMovement_Fall : SPlayerMovementState
 {
-    [SerializeField] private float _simulatedFallMass = 5.0f;
-    [SerializeField] private float _simulatedJumpMass = 0.5f;
+    [SerializeField] private float _fallingGravityScale = 1.0f;
+    [SerializeField] private float _jumpingGravityScale = 1.0f;
     public SPlayerMovementState _landedState;
     [Header("Transition Tuning")]
     [SerializeField] private float _groundCheckPreventionTime = 0.5f;
 
     private float _stateStartedTimestamp;
 
-    public float fallMass { get { return _simulatedFallMass; } }
-    public float jumpMass { get { return _simulatedJumpMass; } }
+    public float fallGravityScale { get { return _fallingGravityScale; } }
+    public float jumpGravityScale { get { return _jumpingGravityScale; } }
 
     public override bool CanJump() { return true; }
+
+    private CharacterController GetCharacterController(PlayerMovement playerMovement)
+    {
+        CharacterController controller = playerMovement.GetComponent<CharacterController>();
+        if (controller == null)
+        {
+            Debug.LogError($"Movement state [{name}] is expecting a CharacterController but none is present.");
+            return null;
+        }
+
+        return controller;
+    }
 
     public override void EnterState()
     {
         _stateStartedTimestamp = Time.time;
     }
 
-    public override void UpdateState(PlayerMovement playerMovement, Rigidbody playerRigidbody)
+    public override void UpdateState(PlayerMovement playerMovement, Vector3 inputVector)
     {
-        bool isFalling = playerRigidbody.velocity.y <= 0;
+        CharacterController controller = GetCharacterController(playerMovement);
 
-        float weight = isFalling ? fallMass : jumpMass;
+        bool jumpFrame = inputVector.y > 0;
 
         Vector3 localMovementVector = Fighter.GameplayStatics.ProjectInputVectorToCamera(Camera.main, playerMovement.transform, playerMovement.inputVector);
+        Vector3 movementVector = new Vector3(localMovementVector.x * baseMoveSpeed, controller.velocity.y, localMovementVector.z * baseMoveSpeed);
+        movementVector.y += inputVector.y;
 
-        // Assign new velocity
-        playerRigidbody.velocity = new Vector3(localMovementVector.x * baseMoveSpeed, playerRigidbody.velocity.y, localMovementVector.z * baseMoveSpeed);
-        playerRigidbody.velocity += Vector3.up * Physics.gravity.y * weight * Time.deltaTime;
+        // Apply gravity
+        bool isFalling = !jumpFrame && controller.velocity.y <= 0;
+        movementVector.y += (Physics.gravity.y * (isFalling ? fallGravityScale : jumpGravityScale) * Time.deltaTime);
+
+        controller.Move(movementVector * Time.deltaTime);
     }
 
-    public override bool CheckShouldSwitchState(PlayerMovement playerMovement, Rigidbody playerRigidbody, ref SPlayerMovementState newState)
+    public override bool CheckShouldSwitchState(PlayerMovement playerMovement, ref SPlayerMovementState newState)
     {
         if (Time.time < _stateStartedTimestamp + _groundCheckPreventionTime)
         {
             return false;
         }
 
-        if (!Fighter.GameplayStatics.TraceForGroundUnderneath(playerMovement, playerMovement.groundMask))
+        CharacterController controller = GetCharacterController(playerMovement);
+        if (!controller.isGrounded)
         {
             return false;
         }

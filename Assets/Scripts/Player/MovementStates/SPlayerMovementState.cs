@@ -11,8 +11,8 @@ public abstract class SPlayerMovementState : ScriptableObject
     public virtual bool CanJump() { return false; }
     public virtual bool IsFallingState() { return false; }
     public virtual void EnterState() {}
-    public abstract void UpdateState(PlayerMovement playerMovement, Rigidbody playerRigidbody);
+    public abstract void UpdateState(PlayerMovement playerMovement, Vector3 inputVector);
     public virtual void LeaveState() {}
 
-    public virtual bool CheckShouldSwitchState(PlayerMovement playerMovement, Rigidbody playerRigidbody, ref SPlayerMovementState newState) { return false; }
+    public virtual bool CheckShouldSwitchState(PlayerMovement playerMovement, ref SPlayerMovementState newState) { return false; }
 }

@@ -14,13 +14,13 @@ public struct AbilitySpec
     public EAbilityRemovalPolicy removalPolicy;
 };
 
-public struct ActiveAbilitySpec
+public class ActiveAbilitySpec
 {
-    public GameplayAbility_Base ability;
-    public GameplayAbility_Base abilityTemplate;
-    public EAbilityRemovalPolicy removalPolicy;
-    public bool active;
-    public bool inputActive;
+    public GameplayAbility_Base ability { get; set; } = null;
+    public GameplayAbility_Base abilityTemplate { get; set; } = null;
+    public EAbilityRemovalPolicy removalPolicy { get; set; } = EAbilityRemovalPolicy.CancelImmediately;
+    public bool active { get; set; } = false;
+    public bool inputActive { get; set; } = false;
 }
 
 public struct GameplayEventData
@@ -31,6 +31,11 @@ public struct GameplayEventData
 
 public class AbilitySystem : MonoBehaviour
 {
+    public delegate void AbilityDelegate(GameplayAbility_Base ability);
+    public AbilityDelegate onAbilityEnded;
+    public AbilityDelegate onAbilityActivated;
+    public AbilityDelegate onAbilityActivationFailed;
+
     // Internal properties
     public Animator animator { get; private set; }
     public GameObject owner { get; private set; }
@@ -40,8 +45,8 @@ public class AbilitySystem : MonoBehaviour
     TagContainer dynamicOwnedTags = new TagContainer();
     TagContainer activationBlockedTags = new TagContainer();
 
-    List<ActiveAbilitySpec> ownedAbilities = new List<ActiveAbilitySpec>();
-    Dictionary<string, List<ActiveAbilitySpec>> inputBoundAbilities = new Dictionary<string, List<ActiveAbilitySpec>>();
+    List<ActiveAbilitySpec> _ownedAbilities = new List<ActiveAbilitySpec>();
+    Dictionary<string, List<ActiveAbilitySpec>> _inputBoundAbilities = new Dictionary<string, List<ActiveAbilitySpec>>();
 
     public AbilitySpec[] startupAbilities;
 
@@ -81,17 +86,24 @@ public class AbilitySystem : MonoBehaviour
         initialized = true;
     }
 
+    public ActiveAbilitySpec GetAbilitySpecFromAbility(GameplayAbility_Base ability)
+    {
+        return _ownedAbilities.Find(item => item.ability == ability);
+    }
+
     public bool HasAbility(GameplayAbility_Base ability)
     {
-        foreach (var spec in ownedAbilities)
-        {
-            if (spec.abilityTemplate == ability)
-            {
-                return true;
-            }
-        }
+        return _ownedAbilities.Find(item => item.abilityTemplate == ability || item.ability == ability) != null;
+    }
 
-        return false;
+    public List<ActiveAbilitySpec> GetActiveAbilitySpecs()
+    {
+        return _ownedAbilities.FindAll(item => item.active);
+    }
+
+    public List<ActiveAbilitySpec> GetAbilitySpecsBoundToInput(string inputAction)
+    {
+        return _inputBoundAbilities.ContainsKey(inputAction) ? _inputBoundAbilities[inputAction] : new List<ActiveAbilitySpec>();
     }
 
     public bool GrantAbility(GameplayAbility_Base ability, string inputActionBinding = "", EAbilityRemovalPolicy removalPolicy = EAbilityRemovalPolicy.CancelImmediately)
@@ -115,22 +127,20 @@ public class AbilitySystem : MonoBehaviour
         newSpec.ability = Instantiate(abilityToGrant.ability);
         newSpec.ability.name = $"{abilityToGrant.ability.name}_instance";
         newSpec.ability.abilitySystem = this;
+        newSpec.ability.spec = newSpec;
         newSpec.abilityTemplate = abilityToGrant.ability;
         newSpec.removalPolicy = abilityToGrant.removalPolicy;
-        newSpec.active = false;
-        newSpec.inputActive = false;
 
-        ownedAbilities.Add(newSpec);
-        Debug.Log(abilityToGrant.ability.name);
+        _ownedAbilities.Add(newSpec);
 
         if (abilityToGrant.inputActionBinding.Length > 0)
         {
-            if (!inputBoundAbilities.ContainsKey(abilityToGrant.inputActionBinding))
+            if (!_inputBoundAbilities.ContainsKey(abilityToGrant.inputActionBinding))
             {
-                inputBoundAbilities.Add(abilityToGrant.inputActionBinding, new List<ActiveAbilitySpec>());
+                _inputBoundAbilities.Add(abilityToGrant.inputActionBinding, new List<ActiveAbilitySpec>());
             }
 
-            List<ActiveAbilitySpec> currentBoundAbilities = inputBoundAbilities[abilityToGrant.inputActionBinding];
+            List<ActiveAbilitySpec> currentBoundAbilities = _inputBoundAbilities[abilityToGrant.inputActionBinding];
             if (!currentBoundAbilities.Contains(newSpec))
             {
                 currentBoundAbilities.Add(newSpec);
@@ -148,19 +158,31 @@ public class AbilitySystem : MonoBehaviour
 
         return numActivatedAbilities;
     }
-    
+
     private void ProcessInputAction(InputAction.CallbackContext context)
     {
-        if (!inputBoundAbilities.ContainsKey(context.action.name))
-        {
-            return;
-        }
-
-        List<ActiveAbilitySpec> abilitiesToActivate = inputBoundAbilities[context.action.name];
+        List<ActiveAbilitySpec> abilitiesToActivate = GetAbilitySpecsBoundToInput(context.action.name);
 
         foreach (var spec in abilitiesToActivate)
         {
-            TryActivateAbilitySpec(spec, new GameplayEventData());
+            if (context.started)
+            {
+                if (!TryActivateAbilitySpec(spec, new GameplayEventData()) && spec.active && !spec.inputActive)
+                {
+                    spec.ability.InputKeyDown();
+                }
+
+                spec.inputActive = true;
+            }
+            else if (context.canceled)
+            {
+                if (spec.active && spec.inputActive)
+                {
+                    spec.ability.InputKeyUp();
+                }
+
+                spec.inputActive = false;
+            }
         }
     }
 
@@ -171,8 +193,14 @@ public class AbilitySystem : MonoBehaviour
             return false;
         }
 
-        spec.ability.ActivateAbility(payload);
+        ActivateAbilitySpec_Internal(spec, payload);
         return true;
+    }
+
+    private void ActivateAbilitySpec_Internal(ActiveAbilitySpec spec, GameplayEventData payload)
+    {
+        spec.ability.onAbilityEnded = NotifyAbilityEnded;
+        spec.ability.ActivateAbility(payload);
     }
 
     private bool CanActivateAbilitySpec(ActiveAbilitySpec spec)
@@ -201,6 +229,24 @@ public class AbilitySystem : MonoBehaviour
             return false;
         }
 
+        if (spec.active && !spec.ability.retriggerInstancedAbility)
+        {
+            return false;
+        }
+
         return true;
+    }
+
+    private void NotifyAbilityEnded(GameplayAbility_Base ability)
+    {
+        if (HasAbility(ability))
+        {
+            ability.onAbilityEnded = null;
+
+            if (onAbilityEnded != null)
+            {
+                onAbilityEnded(ability);
+            }
+        }
     }
 }

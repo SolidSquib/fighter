@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(menuName="Gameplay Ability/Jump")]
 public class GameplayAbility_Jump : GameplayAbility_Base
@@ -12,6 +13,8 @@ public class GameplayAbility_Jump : GameplayAbility_Base
         {
             playerCharacter.HandleJump();
         }
+
+        EndAbility(false);
     }
 
     public override bool CanActivateAbility()

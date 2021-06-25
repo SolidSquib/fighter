@@ -67,6 +67,6 @@ public class PlayerCharacter : MonoBehaviour
         //animator.SetBool("isJumping", jumping);
         //animator.SetBool("isFalling", falling);
         animator.SetFloat("moveSpeed", playerMovement.inputVector.magnitude);
-        animator.SetFloat("verticalSpeed", playerRigidbody.velocity.y);
+        //animator.SetFloat("verticalSpeed", playerRigidbody.velocity.y);
     }
 }

@@ -7,9 +7,9 @@ public abstract class SPlayerJumpBehaviour : ScriptableObject
     public float jumpVelocity = 100.0f;
     public SPlayerMovementState jumpMovementState;
 
-    public bool ExecuteJump(PlayerMovement playerMovement, Rigidbody playerRigidbody)
+    public bool ExecuteJump(PlayerMovement playerMovement, out Vector3 jumpTargetVelocity)
     {
-        if (ExecuteJump_Internal(playerMovement, playerRigidbody))
+        if (ExecuteJump_Internal(playerMovement, out jumpTargetVelocity))
         {
             if (jumpMovementState != null)
             {
@@ -21,5 +21,5 @@ public abstract class SPlayerJumpBehaviour : ScriptableObject
         return false;
     }
 
-    protected abstract bool ExecuteJump_Internal(PlayerMovement playerMovement, Rigidbody playerRigidbody);
+    protected abstract bool ExecuteJump_Internal(PlayerMovement playerMovement, out Vector3 jumpTargetVelocity);
 }

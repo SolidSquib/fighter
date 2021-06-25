@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(CapsuleCollider))]
 public class PlayerMovement : MonoBehaviour
 {
     // Delegates
@@ -14,8 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public MovementStateChangedDelegate onMovementStateChanged { get; set; }
 
     // Properties
-    public Rigidbody playerRigidbody { get; private set; }
-    public CapsuleCollider playerCapsule { get; private set; }
+    private Vector3 _jumpTargetVelocity;
+
     public Vector3 inputVector { get; set; }
     public int currentNumJumps { get; private set; }
     public bool isCurrentlyJumping { get; private set; }
@@ -23,6 +21,13 @@ public class PlayerMovement : MonoBehaviour
     public SPlayerMovementState overrideMovementState { get; set; }
 
     #region EditorProperties
+    /// <summary>
+    /// Whether we want to run state updates on the FixedUpdate event (true) or on the Update event (false).
+    /// It is recommended to use Fixed update if movement is based on forces attached to a rigidbody.
+    /// </summary>
+    /// <value>false</value>
+    [SerializeField] private bool _useFixedUpdate = false;
+
     [Header("Jump Settings")]
     [SerializeField] private int _maxJumps = 1;
     [SerializeField] private LayerMask _groundLayerMask;
@@ -38,9 +43,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        playerRigidbody = GetComponent<Rigidbody>();
-        playerCapsule = GetComponent<CapsuleCollider>();
-
         currentNumJumps = 0;
     }
 
@@ -61,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
             return false;
         }
 
-        if (!_jumpBehaviour.ExecuteJump(this, playerRigidbody))
+        if (!_jumpBehaviour.ExecuteJump(this, out _jumpTargetVelocity))
         {
             return false;
         }
@@ -117,6 +119,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (_useFixedUpdate)
+        {
+            Update_Internal();
+        }
+    }
+
+    private void Update()
+    {
+        if (!_useFixedUpdate)
+        {
+            Update_Internal();
+        }
+    }
+
+    protected virtual void Update_Internal()
+    {
         if (activeMovementState == null)
         {
             if (_defaultMovementState == null)
@@ -149,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
                 overrideMovementState = null;
             }
 
-            if (!hasStateChangedThisFrame && activeMovementState.CheckShouldSwitchState(this, playerRigidbody, ref targetState))
+            if (!hasStateChangedThisFrame && activeMovementState.CheckShouldSwitchState(this, ref targetState))
             {
                 if (targetState != null)
                 {
@@ -166,12 +184,14 @@ public class PlayerMovement : MonoBehaviour
                 NotifyStateChanged(activeMovementState, previousState);
             }
 
-            activeMovementState.UpdateState(this, playerRigidbody);
+            activeMovementState.UpdateState(this, _jumpTargetVelocity);
         }
 
         if (_playerOrientationOverride != null)
         {
             _playerOrientationOverride.OrientPlayer(this);
         }
+
+        _jumpTargetVelocity = Vector3.zero;
     }
 }
