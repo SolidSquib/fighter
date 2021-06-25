@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4e847ccca5a67e4cb6c85f34f7d508a, type: 3}
   m_Name: Movement_Walk
   m_EditorClassIdentifier: 
-  _baseMoveSpeed: 10
+  _baseMoveSpeed: 3
+  _fallingState: {fileID: 11400000, guid: 974a32a4dc72d704db85e3c72d9c41b8, type: 2}

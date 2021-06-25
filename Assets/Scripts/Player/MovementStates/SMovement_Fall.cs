@@ -5,13 +5,23 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player Movement/Movement State/Defaults/Fall")]
 public class SMovement_Fall : SPlayerMovementState
 {
-    [SerializeField] private LayerMask _groundLayerMask;
     [SerializeField] private float _simulatedFallMass = 5.0f;
     [SerializeField] private float _simulatedJumpMass = 0.5f;
+    public SPlayerMovementState _landedState;
+    [Header("Transition Tuning")]
+    [SerializeField] private float _groundCheckPreventionTime = 0.5f;
 
-    public LayerMask groundMask { get { return _groundLayerMask; } }
+    private float _stateStartedTimestamp;
+
     public float fallMass { get { return _simulatedFallMass; } }
     public float jumpMass { get { return _simulatedJumpMass; } }
+
+    public override bool CanJump() { return true; }
+
+    public override void EnterState()
+    {
+        _stateStartedTimestamp = Time.time;
+    }
 
     public override void UpdateState(PlayerMovement playerMovement, Rigidbody playerRigidbody)
     {
@@ -26,8 +36,19 @@ public class SMovement_Fall : SPlayerMovementState
         playerRigidbody.velocity += Vector3.up * Physics.gravity.y * weight * Time.deltaTime;
     }
 
-    public override bool CheckShouldSwitchState(ref SPlayerMovementState newState) 
-    { 
-        return false; 
+    public override bool CheckShouldSwitchState(PlayerMovement playerMovement, Rigidbody playerRigidbody, ref SPlayerMovementState newState)
+    {
+        if (Time.time < _stateStartedTimestamp + _groundCheckPreventionTime)
+        {
+            return false;
+        }
+
+        if (!Fighter.GameplayStatics.TraceForGroundUnderneath(playerMovement, playerMovement.groundMask))
+        {
+            return false;
+        }
+
+        newState = _landedState;
+        return true;
     }
 }

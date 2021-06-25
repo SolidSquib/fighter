@@ -35,10 +35,9 @@ namespace Fighter
             const float traceRadius = 0.1f;
             float capsuleHalfHeight = Mathf.Max(playerMovement.playerCapsule.radius, playerMovement.playerCapsule.height * 0.5f);
             Vector3 traceStart = playerMovement.transform.position;
-            traceStart.y -= capsuleHalfHeight + traceRadius;
-            Vector3 traceEnd = new Vector3(traceStart.x, traceStart.y - traceRadius, traceStart.z);
-
-            Debug.DrawLine(traceStart, traceEnd, Color.red, 0);
+            traceStart.y -= (capsuleHalfHeight - traceRadius);
+            
+            DebugExtension.DebugWireSphere(traceStart, Color.red, traceRadius);
 
             if (groundLayerMask != 0)
             {

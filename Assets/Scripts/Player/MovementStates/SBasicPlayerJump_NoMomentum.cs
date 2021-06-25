@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player Movement/Jump Behaviour/Defaults/No Momentum")]
 public class SBasicPlayerJump_NoMomentum : SPlayerJumpBehaviour
 {
-    public override bool ExecuteJump(PlayerMovement playerMovement, Rigidbody playerRigidbody)
+    protected override bool ExecuteJump_Internal(PlayerMovement playerMovement, Rigidbody playerRigidbody)
     {
         if (playerRigidbody == null)
         {

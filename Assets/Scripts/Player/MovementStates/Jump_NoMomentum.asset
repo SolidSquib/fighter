@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d08c63bba274ce941a0742656bdfc366, type: 3}
   m_Name: Jump_NoMomentum
   m_EditorClassIdentifier: 
-  jumpVelocity: 100
+  jumpVelocity: 10
+  jumpMovementState: {fileID: 11400000, guid: 974a32a4dc72d704db85e3c72d9c41b8, type: 2}

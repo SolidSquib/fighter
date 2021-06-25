@@ -14,5 +14,5 @@ public abstract class SPlayerMovementState : ScriptableObject
     public abstract void UpdateState(PlayerMovement playerMovement, Rigidbody playerRigidbody);
     public virtual void LeaveState() {}
 
-    public virtual bool CheckShouldSwitchState(ref SPlayerMovementState newState) { return false; }
+    public virtual bool CheckShouldSwitchState(PlayerMovement playerMovement, Rigidbody playerRigidbody, ref SPlayerMovementState newState) { return false; }
 }

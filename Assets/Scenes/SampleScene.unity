@@ -404,7 +404,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 904663674}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.741, y: 0.5, z: -1.695}
+  m_LocalPosition: {x: 1.741, y: 2.34, z: -1.695}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -505,6 +505,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: e6398ebff0d8d554f939e69beb50d1f1,
         type: 2}
+    - target: {fileID: 1408083823, guid: db5fca00b2d2bf741835ca1f1c892c3b, type: 3}
+      propertyPath: _groundLayerMask.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1408083823, guid: db5fca00b2d2bf741835ca1f1c892c3b, type: 3}
       propertyPath: _playerOrientationOverride
       value: 

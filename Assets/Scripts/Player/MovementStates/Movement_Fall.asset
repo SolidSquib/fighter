@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6c275f71aa79eb46b6f38d63b84c74c, type: 3}
   m_Name: Movement_Fall
   m_EditorClassIdentifier: 
-  _baseMoveSpeed: 10
-  _groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
+  _baseMoveSpeed: 3
   _simulatedFallMass: 5
   _simulatedJumpMass: 0.5
+  _landedState: {fileID: 11400000, guid: e6398ebff0d8d554f939e69beb50d1f1, type: 2}
+  _groundCheckPreventionTime: 0.5

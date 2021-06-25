@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public delegate void SimpleMovementDelegate();
     public delegate void MovementStateChangedDelegate(SPlayerMovementState newState, SPlayerMovementState oldState);
     public SimpleMovementDelegate onJumpApexReached { get; set; }
+    public SimpleMovementDelegate onLanded { get; set; }
     public MovementStateChangedDelegate onMovementStateChanged { get; set; }
 
     // Properties
@@ -24,19 +25,23 @@ public class PlayerMovement : MonoBehaviour
     #region EditorProperties
     [Header("Jump Settings")]
     [SerializeField] private int _maxJumps = 1;
+    [SerializeField] private LayerMask _groundLayerMask;
     [SerializeField] private SPlayerMovementState _defaultMovementState;
     [SerializeField] private SPlayerJumpBehaviour _jumpBehaviour;
-    [SerializeField] private SPlayerOrientationControl _playerOrientationOverride; 
+    [SerializeField] private SPlayerOrientationControl _playerOrientationOverride;
     #endregion
 
     #region PropertyAccessors
     public int maxJumps { get { return _maxJumps; } set { _maxJumps = value; } }
+    public LayerMask groundMask { get { return _groundLayerMask; } }
     #endregion
 
     private void Awake()
     {
         playerRigidbody = GetComponent<Rigidbody>();
         playerCapsule = GetComponent<CapsuleCollider>();
+
+        currentNumJumps = 0;
     }
 
     public bool CanJump()
@@ -74,6 +79,42 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void NotifyLanded()
+    {
+        if (onLanded != null)
+        {
+            onLanded();
+        }
+    }
+
+    private void NotifyStateChanged(SPlayerMovementState newState, SPlayerMovementState previousState)
+    {
+        if (newState == null)
+        {
+            Debug.LogWarning($"NotifyStateChanged has been called following a null newState.");
+        }
+
+        if (!newState.IsFallingState())
+        {
+            currentNumJumps = 0;
+
+            if (previousState != null && previousState.IsFallingState())
+            {
+                NotifyLanded();
+            }
+        }
+        else if (currentNumJumps <= 0)
+        {
+            // Walking off a ledge should could as the initial jump.
+            currentNumJumps += 1;
+        }
+
+        if (onMovementStateChanged != null)
+        {
+            onMovementStateChanged(newState, previousState);
+        }
+    }
+
     private void FixedUpdate()
     {
         if (activeMovementState == null)
@@ -85,17 +126,20 @@ public class PlayerMovement : MonoBehaviour
             }
             activeMovementState = _defaultMovementState;
             activeMovementState.EnterState();
+
+            NotifyStateChanged(_defaultMovementState, null);
         }
 
         if (activeMovementState != null)
         {
-            SPlayerMovementState targetState = null;
+            SPlayerMovementState targetState = null, previousState = null;
             bool hasStateChangedThisFrame = false;
 
             if (overrideMovementState != null)
             {
                 if (overrideMovementState != activeMovementState)
                 {
+                    previousState = activeMovementState;
                     activeMovementState.LeaveState();
                     activeMovementState = overrideMovementState;
                     activeMovementState.EnterState();
@@ -105,14 +149,21 @@ public class PlayerMovement : MonoBehaviour
                 overrideMovementState = null;
             }
 
-            if (!hasStateChangedThisFrame && activeMovementState.CheckShouldSwitchState(ref targetState))
+            if (!hasStateChangedThisFrame && activeMovementState.CheckShouldSwitchState(this, playerRigidbody, ref targetState))
             {
                 if (targetState != null)
                 {
+                    previousState = activeMovementState;
                     activeMovementState.LeaveState();
                     activeMovementState = targetState;
                     activeMovementState.EnterState();
+                    hasStateChangedThisFrame = true;
                 }
+            }
+
+            if (hasStateChangedThisFrame)
+            {
+                NotifyStateChanged(activeMovementState, previousState);
             }
 
             activeMovementState.UpdateState(this, playerRigidbody);
