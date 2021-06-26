@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class GameplayAbilityTask_Base 
+public abstract class GameplayAbilityTask_Base : MonoBehaviour
 {   
     GameplayAbility_Base owningAbility;
     AbilitySystem owningSystem;

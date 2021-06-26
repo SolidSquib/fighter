@@ -32,9 +32,11 @@ public struct GameplayEventData
 public class AbilitySystem : MonoBehaviour
 {
     public delegate void AbilityDelegate(GameplayAbility_Base ability);
+    public delegate void GameplayEventNotify(Tag eventTag, GameplayEventData eventData);
     public AbilityDelegate onAbilityEnded;
     public AbilityDelegate onAbilityActivated;
     public AbilityDelegate onAbilityActivationFailed;
+    private Dictionary<Tag, GameplayEventNotify> genericGameplayEventCallbacks;
 
     // Internal properties
     public Animator animator { get; private set; }
@@ -153,10 +155,50 @@ public class AbilitySystem : MonoBehaviour
     public int ProcessGameplayEvent(Tag eventTag, GameplayEventData payload)
     {
         int numActivatedAbilities = 0;
+        List<ActiveAbilitySpec> eventResponders = _ownedAbilities.FindAll(spec =>
+        {
+            return spec.ability.tagTriggers.Find(trigger => eventTag.IsChildOf(trigger.triggerTag) && trigger.triggerMethod == GameplayAbilityTrigger.ETriggerMethod.GameplayEvent) != null;
+        });
 
+        foreach (var spec in eventResponders)
+        {
+            TryActivateAbilitySpec(spec, payload);
+        }
 
+        GameplayEventNotify genericCallbacks;
+        if (genericGameplayEventCallbacks.TryGetValue(eventTag, out genericCallbacks))
+        {
+            genericCallbacks(eventTag, payload);
+        }
 
         return numActivatedAbilities;
+    }
+
+    public void RegisterGenericGameplayEventCallback(Tag eventTag, GameplayEventNotify callback)
+    {
+        GameplayEventNotify existingCallback;
+        if (genericGameplayEventCallbacks.TryGetValue(eventTag, out existingCallback))
+        {
+            existingCallback += callback;
+        }
+        else
+        {
+            genericGameplayEventCallbacks.Add(eventTag, callback);
+        }
+    }
+
+    public void UnregisterGenericGameplayEventCallback(Tag eventTag, GameplayEventNotify callback)
+    {
+        GameplayEventNotify existingCallback;
+        if (genericGameplayEventCallbacks.TryGetValue(eventTag, out existingCallback))
+        {
+            existingCallback -= callback;
+
+            if (existingCallback == null)
+            {
+                genericGameplayEventCallbacks.Remove(eventTag);
+            }
+        }
     }
 
     private void ProcessInputAction(InputAction.CallbackContext context)
@@ -165,7 +207,7 @@ public class AbilitySystem : MonoBehaviour
 
         foreach (var spec in abilitiesToActivate)
         {
-            if (context.started)
+            if (context.performed)
             {
                 if (!TryActivateAbilitySpec(spec, new GameplayEventData()) && spec.active && !spec.inputActive)
                 {

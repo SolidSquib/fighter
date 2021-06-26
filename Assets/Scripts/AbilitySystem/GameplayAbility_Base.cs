@@ -4,12 +4,12 @@ using UnityEngine;
 using Fighter.Types;
 
 [Serializable]
-public struct GameplayAbilityTrigger
+public class GameplayAbilityTrigger
 {
     public enum ETriggerMethod { GameplayEvent, TagPresent, TagAdded, TagRemoved }
 
-    public Tag triggerTag;
-    public ETriggerMethod triggerMethod;
+    public Tag triggerTag = null;
+    public ETriggerMethod triggerMethod = ETriggerMethod.GameplayEvent;
 }
 
 public abstract class GameplayAbility_Base : ScriptableObject
@@ -27,7 +27,7 @@ public abstract class GameplayAbility_Base : ScriptableObject
     public bool retriggerInstancedAbility = false;
 
     [Header("Ability Triggers")]
-    public GameplayAbilityTrigger[] tagTriggers;
+    public List<GameplayAbilityTrigger> tagTriggers = new List<GameplayAbilityTrigger>();
     public bool activatedAbilityWhenGranted;
 
     public AbilitySystem abilitySystem { get; set; }

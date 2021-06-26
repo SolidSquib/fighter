@@ -62,6 +62,7 @@ public sealed class Tag : ScriptableObject, System.IEquatable<Tag>, System.IComp
 
 
     public bool Equals(Tag other)       { return other == this ? true : false; }
+    public bool Equals(string other)    { return other == this.name; }
     public int  CompareTo(Tag other)    { return other != null ? GetFullPath ().CompareTo(other.GetFullPath ()) : 1; }
 
     public static bool operator >   (Tag operand1, Tag operand2) { return operand1.CompareTo(operand2) == 1; }

@@ -17,6 +17,7 @@ public class SMovement_Fall : SPlayerMovementState
     public float jumpGravityScale { get { return _jumpingGravityScale; } }
 
     public override bool CanJump() { return true; }
+    public override bool IsFallingState() { return true; }
 
     private CharacterController GetCharacterController(PlayerMovement playerMovement)
     {
@@ -43,7 +44,11 @@ public class SMovement_Fall : SPlayerMovementState
 
         Vector3 localMovementVector = Fighter.GameplayStatics.ProjectInputVectorToCamera(Camera.main, playerMovement.transform, playerMovement.inputVector);
         Vector3 movementVector = new Vector3(localMovementVector.x * baseMoveSpeed, controller.velocity.y, localMovementVector.z * baseMoveSpeed);
-        movementVector.y += inputVector.y;
+
+        if (jumpFrame)
+        {
+            movementVector.y = inputVector.y;
+        }
 
         // Apply gravity
         bool isFalling = !jumpFrame && controller.velocity.y <= 0;

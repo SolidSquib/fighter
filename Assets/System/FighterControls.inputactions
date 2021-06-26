@@ -28,6 +28,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Dash",
+                    "type": "Value",
+                    "id": "d7a1b849-9b69-4edf-83dc-fcd5c9612b77",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "MultiTap"
                 }
             ],
             "bindings": [
@@ -140,6 +148,39 @@
                     "action": "LightAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "e43f84a5-a129-4d81-b91a-e3d076a18682",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "a21b41e5-5378-490d-a745-111364787392",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "22b6874f-3ee4-4fe9-8d1a-4be430165506",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }

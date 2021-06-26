@@ -29,7 +29,12 @@ public class PlayerCharacter : MonoBehaviour
 
     private void HandleInputAction(InputAction.CallbackContext context)
     {
-        if (context.action.name == "Move")
+        if (context.action.name == "Dash")
+        {
+            /* Vector2 stickValue = context.ReadValue<Vector2>();
+            AbilityStatics.SendGameplayEventToAbilitySystem(abilitySystem, ) */
+        }
+        else if (context.action.name == "Move")
         {
             Vector2 stickValue = context.ReadValue<Vector2>();
             playerMovement.inputVector = new Vector3(stickValue.x, 0, stickValue.y);
