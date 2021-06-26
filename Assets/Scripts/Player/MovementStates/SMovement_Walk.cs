@@ -23,6 +23,12 @@ public class SMovement_Walk : SPlayerMovementState
         return controller;
     }
 
+    public override void EnterState(PlayerMovement playerMovement)
+    {
+        Animator animator = playerMovement.GetComponentInChildren<Animator>();
+        animator.SetBool("isFalling", false);
+    }
+
     public override void UpdateState(PlayerMovement playerMovement, Vector3 inputVector)
     {
         CharacterController controller = GetCharacterController(playerMovement);

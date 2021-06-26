@@ -31,9 +31,12 @@ public class SMovement_Fall : SPlayerMovementState
         return controller;
     }
 
-    public override void EnterState()
+    public override void EnterState(PlayerMovement playerMovement)
     {
         _stateStartedTimestamp = Time.time;
+
+        Animator animator = playerMovement.GetComponentInChildren<Animator>();
+        animator.SetBool("isFalling", true);
     }
 
     public override void UpdateState(PlayerMovement playerMovement, Vector3 inputVector)

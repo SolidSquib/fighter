@@ -143,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
                 return;
             }
             activeMovementState = _defaultMovementState;
-            activeMovementState.EnterState();
+            activeMovementState.EnterState(this);
 
             NotifyStateChanged(_defaultMovementState, null);
         }
@@ -158,9 +158,9 @@ public class PlayerMovement : MonoBehaviour
                 if (overrideMovementState != activeMovementState)
                 {
                     previousState = activeMovementState;
-                    activeMovementState.LeaveState();
+                    activeMovementState.LeaveState(this);
                     activeMovementState = overrideMovementState;
-                    activeMovementState.EnterState();
+                    activeMovementState.EnterState(this);
                     hasStateChangedThisFrame = true;
                 }
 
@@ -172,9 +172,9 @@ public class PlayerMovement : MonoBehaviour
                 if (targetState != null)
                 {
                     previousState = activeMovementState;
-                    activeMovementState.LeaveState();
+                    activeMovementState.LeaveState(this);
                     activeMovementState = targetState;
-                    activeMovementState.EnterState();
+                    activeMovementState.EnterState(this);
                     hasStateChangedThisFrame = true;
                 }
             }

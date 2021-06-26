@@ -9,20 +9,18 @@ using UnityEngine.InputSystem;
 public class PlayerCharacter : MonoBehaviour
 {
     public Animator animator { get; protected set; }
-    public Rigidbody playerRigidbody { get; protected set; }
-    public CapsuleCollider capsule { get; protected set; }
     public AbilitySystem abilitySystem { get; protected set; }
     public PlayerMovement playerMovement { get; protected set; }
+    public CharacterController characterController { get; private set; }
 
     // Start is called before the first frame update
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
-        playerRigidbody = GetComponent<Rigidbody>();
-        capsule = GetComponent<CapsuleCollider>();
         abilitySystem = GetComponent<AbilitySystem>();
         abilitySystem.InitializeAbilitySystem(gameObject, gameObject);
         playerMovement = GetComponent<PlayerMovement>();
+        characterController = GetComponent<CharacterController>();
 
         GetComponent<PlayerInput>().onActionTriggered += HandleInputAction;
     }
@@ -69,9 +67,10 @@ public class PlayerCharacter : MonoBehaviour
             return;
         }
 
-        //animator.SetBool("isJumping", jumping);
-        //animator.SetBool("isFalling", falling);
-        animator.SetFloat("moveSpeed", playerMovement.inputVector.magnitude);
-        //animator.SetFloat("verticalSpeed", playerRigidbody.velocity.y);
+        Vector3 horizontalMovement = characterController.velocity;
+        horizontalMovement.y = 0;
+
+        animator.SetFloat("moveSpeed", horizontalMovement.magnitude);
+        animator.SetFloat("verticalSpeed", characterController.velocity.y);
     }
 }
