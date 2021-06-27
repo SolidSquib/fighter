@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Gameplay Ability/Player Melee")]
-public class SGameplayAbility_PlayerMelee : GameplayAbility_Base
+[CreateAssetMenu(menuName = "Ability System/Gameplay Ability/Player Melee")]
+public class SGameplayAbility_PlayerMelee : SGameplayAbility
 {
     public AnimationClip attackAnim;
     public override void ActivateAbility(GameplayEventData payload)

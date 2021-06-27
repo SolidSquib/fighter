@@ -1,12 +1,12 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class GameplayAbilityTask_Base : MonoBehaviour
+public abstract class SGameplayAbilityTask : MonoBehaviour
 {   
-    GameplayAbility_Base owningAbility;
+    SGameplayAbility owningAbility;
     AbilitySystem owningSystem;
 
-    public virtual void InitTask(GameplayAbility_Base executingAbility, AbilitySystem executingSystem)
+    public virtual void InitTask(SGameplayAbility executingAbility, AbilitySystem executingSystem)
     {
         owningAbility = executingAbility;
         owningSystem = executingSystem;

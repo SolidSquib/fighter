@@ -219,6 +219,12 @@ MonoBehaviour:
   - ability: {fileID: 11400000, guid: ad97f9dfc9ea8864895e34a14ea78cdb, type: 2}
     inputActionBinding: Jump
     removalPolicy: 0
+  - ability: {fileID: 11400000, guid: c7fbbae9961a85b40be5beaf2e817938, type: 2}
+    inputActionBinding: Dash
+    removalPolicy: 0
+  - ability: {fileID: 11400000, guid: cb5baf85aaa96614ca5fb63cca63a0a2, type: 2}
+    inputActionBinding: LightAttack
+    removalPolicy: 0
 --- !u!114 &2157829443408683614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,5 +294,5 @@ CharacterController:
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0, z: 0}

@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Gameplay Ability/Dash")]
-public class SGameplayAbility_Dash : GameplayAbility_Base
+[CreateAssetMenu(menuName = "Ability System/Gameplay Ability/Dash")]
+public class SGameplayAbility_Dash : SGameplayAbility
 {
     public override void ActivateAbility(GameplayEventData payload)
     {

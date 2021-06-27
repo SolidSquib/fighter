@@ -12,7 +12,11 @@ public class TagContainer : ListWrapper<Tag> {
     public event TagEventHandler    TagAdded;
     public event TagEventHandler    TagRemoved;
 
-
+    public TagContainer() {}
+    public TagContainer(List<Tag> tags)
+    {
+        this.list = tags;
+    }
 
     public void TriggerTagAdded (Tag oTag) {
         if (TagAdded != null && oTag != null) { TagAdded (this, new TagEventArgs(oTag)); }
@@ -115,4 +119,19 @@ public struct TagRequirementsContainer
 {
     public TagContainer required;
     public TagContainer ignored;
+
+    public bool IsEmpty()
+    {
+        return required.list.Count <= 0 && ignored.list.Count <= 0;
+    }
+
+    public bool RequirementsMet(TagContainer tags)
+    {
+        return tags.AllTagsMatch(required) && tags.NoTagsMatch(ignored);
+    }
+
+    public bool RequirementsMet(CountingTagContainer tags)
+    {
+        return tags.AllTagsMatch(required) && tags.NoTagsMatch(ignored);
+    }
 }

@@ -12,9 +12,9 @@ public class GameplayAbilityTrigger
     public ETriggerMethod triggerMethod = ETriggerMethod.GameplayEvent;
 }
 
-public abstract class GameplayAbility_Base : ScriptableObject
+public abstract class SGameplayAbility : ScriptableObject
 {
-    public delegate void AbilityDelegate(GameplayAbility_Base ability);
+    public delegate void AbilityDelegate(SGameplayAbility ability);
     public AbilityDelegate onAbilityEnded;
 
     public TagContainer abilityTags;
@@ -35,7 +35,7 @@ public abstract class GameplayAbility_Base : ScriptableObject
     // Internal 
     private ActiveAbilitySpec _spec;
     private GameplayEventData _eventData;
-    private List<GameplayAbilityTask_Base> _activeTasks = new List<GameplayAbilityTask_Base>();
+    private List<SGameplayAbilityTask> _activeTasks = new List<SGameplayAbilityTask>();
     public ActiveAbilitySpec spec { get { return _spec; } set { _spec = value; } }
     public bool isActive { get { return _spec.active; } }
     public GameplayEventData eventData { get { return _eventData; } private set { _eventData = value; } }
