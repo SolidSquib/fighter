@@ -141,11 +141,18 @@ public class AbilitySystem : MonoBehaviour
         }
 
         _activeGameplayEffects = new ActiveGameplayEffectsContainer(this);
+        _activeGameplayEffects.onActiveEffectRemoved += HandleActiveEffectRemoved;
     }
 
     private void Update()
     {
         _activeGameplayEffects.RemoveExpiredGameplayEffects();
+    }
+
+    private void LateUpdate()
+    {
+        // Sends attribute updated notifiers for attributes that have been changed this frame.
+        _attributeSetInstance.FlushDirtyAttributes();
     }
 
     public void InitializeAbilitySystem(GameObject newOwner, GameObject newAvatar)
@@ -273,7 +280,7 @@ public class AbilitySystem : MonoBehaviour
         }
     }
 
-    public void RegisterOnAttributeChangedCallback(SAttribute attribute, SAttributeSet.AttributeDelegate callback)
+    public void RegisterOnAttributeChangedCallback(SAttribute attribute, AttributeEventHandler callback)
     {
         if (_attributeSetInstance != null)
         {
@@ -281,7 +288,7 @@ public class AbilitySystem : MonoBehaviour
         }
     }
 
-    public void UnregisterOnAttributeChangedCallback(SAttribute attribute, SAttributeSet.AttributeDelegate callback)
+    public void UnregisterOnAttributeChangedCallback(SAttribute attribute, AttributeEventHandler callback)
     {
         if (_attributeSetInstance != null)
         {
@@ -330,6 +337,7 @@ public class AbilitySystem : MonoBehaviour
     private void ActivateAbilitySpec_Internal(ActiveAbilitySpec spec, GameplayEventData payload)
     {
         spec.ability.onAbilityEnded = NotifyAbilityEnded;
+        _dynamicOwnedTags.AddTags(spec.abilityTemplate.activationOwnedTags);
         spec.ability.ActivateAbility(payload);
     }
 
@@ -371,6 +379,8 @@ public class AbilitySystem : MonoBehaviour
     {
         if (HasAbility(ability))
         {
+            _dynamicOwnedTags.RemoveTags(ability.activationOwnedTags);
+
             ability.onAbilityEnded = null;
 
             if (onAbilityEnded != null)
@@ -450,22 +460,17 @@ public class AbilitySystem : MonoBehaviour
             return ActiveEffectHandle.Invalid;
         }
 
-        RecalculateModifierMagitudesForSpec(spec);
-
-        if (spec.effectTemplate.durationPolicy == SGameplayEffect.EEffectDurationPolicy.Instant)
+        if (spec.effectTemplate.durationPolicy == EEffectDurationPolicy.Instant)
         {
-            foreach (CachedEffectModifierMagnitude mod in spec.cachedModifiers)
-            {
-                _attributeSetInstance.ExecuteAttributeModifier(mod);
-            }
-
-            _activeGameplayEffects.RemoveEffectsWithTags(spec.effectTemplate.removeGameplayEffectsWithTags);
+            _attributeSetInstance.ExecuteEffectSpec(spec);
         }
         else
         {
-            // TODO handle infinite and duration based effects.
             ActiveEffectHandle handle = _activeGameplayEffects.AddActiveGameplayEffect(spec);
-            
+            _attributeSetInstance.ApplyActiveEffectSpec(spec);
+
+            dynamicOwnedTags.AddTags(spec.effectTemplate.grantedTags);
+
             return handle;
         }
 
@@ -482,43 +487,28 @@ public class AbilitySystem : MonoBehaviour
         return ActiveEffectHandle.Invalid;
     }
 
-    protected void RecalculateModifierMagitudesForSpec(GameplayEffectSpec spec)
+    protected void HandleActiveEffectRemoved(ActiveEffectHandle handle, GameplayEffectSpec spec)
     {
-        if (spec.effectTemplate == null)
+        dynamicOwnedTags.RemoveTags(spec.effectTemplate.grantedTags);
+    }
+
+    public float GetAttributeCurrentValue(SAttribute attribute)
+    {
+        if (_attributeSetInstance != null)
         {
-            Debug.LogWarning("Unable to calculate magnitudes of a null Gameplay Effect");
-            return;
+            return _attributeSetInstance.GetAttributeCurrentValue(attribute);
         }
 
-        spec.cachedModifiers.Clear();
+        return 0.0f;
+    }
 
-        foreach (GameplayEffectAttributeModifier modifierInfo in spec.effectTemplate.modifiers)
+    public float GetAttributeBaseValue(SAttribute attribute)
+    {
+        if (_attributeSetInstance != null)
         {
-            CachedEffectModifierMagnitude calculatedModifier = new CachedEffectModifierMagnitude() { attribute = modifierInfo.attribute, method = modifierInfo.magnitude.method };
-
-            switch (modifierInfo.magnitude.magnitudeCalculation)
-            {
-                case EModifierCalculation.ScalableFloat:
-                    calculatedModifier.magnitude = modifierInfo.magnitude.baseMagnitude;
-                    break;
-                case EModifierCalculation.AttributeBased:
-                    calculatedModifier.magnitude = _attributeSetInstance.GetAttributeCurrentValue(modifierInfo.attribute);
-                    break;
-                case EModifierCalculation.CustomCalculationClass:
-                    if (modifierInfo.magnitude.customCalculationClass != null)
-                    {
-                        calculatedModifier.magnitude = modifierInfo.magnitude.customCalculationClass.GetModifierMagnitude();
-                    }
-                    break;
-                case EModifierCalculation.SetByCaller:
-                    if (spec.setByCallerValues.ContainsKey(modifierInfo.magnitude.setByCallerTag))
-                    {
-                        calculatedModifier.magnitude = spec.setByCallerValues[modifierInfo.magnitude.setByCallerTag];
-                    }
-                    break;
-            }
-
-            spec.cachedModifiers.Add(calculatedModifier);
+            return _attributeSetInstance.GetAttributeBaseValue(attribute);
         }
+
+        return 0.0f;
     }
 }

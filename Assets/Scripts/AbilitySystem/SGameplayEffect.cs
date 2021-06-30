@@ -9,6 +9,7 @@ public abstract class SModifierMagnitudeCalculation : ScriptableObject
 
 public enum EModifierMethod { Add, Multiply, Divide, Override }
 public enum EModifierCalculation { ScalableFloat, AttributeBased, CustomCalculationClass, SetByCaller }
+public enum EEffectDurationPolicy { Instant, Infinite, Duration }
 
 [System.Serializable]
 public struct EffectModifierMagnitudeInfo
@@ -49,6 +50,46 @@ public class GameplayEffectSpec
         this.target = target;
         this.effectTemplate = effect;
     }
+
+    public void RecalculateModifierMagitudes(AbilitySystem owner)
+    {
+        if (owner == null)
+        {
+            Debug.LogWarning("Owning Ability System required to calculate magnitudes.");
+            return;
+        }
+
+        cachedModifiers.Clear();
+
+        foreach (GameplayEffectAttributeModifier modifierInfo in effectTemplate.modifiers)
+        {
+            CachedEffectModifierMagnitude calculatedModifier = new CachedEffectModifierMagnitude() { attribute = modifierInfo.attribute, method = modifierInfo.magnitude.method };
+
+            switch (modifierInfo.magnitude.magnitudeCalculation)
+            {
+                case EModifierCalculation.ScalableFloat:
+                    calculatedModifier.magnitude = modifierInfo.magnitude.baseMagnitude;
+                    break;
+                case EModifierCalculation.AttributeBased:
+                    calculatedModifier.magnitude = owner.GetAttributeCurrentValue(modifierInfo.attribute);
+                    break;
+                case EModifierCalculation.CustomCalculationClass:
+                    if (modifierInfo.magnitude.customCalculationClass != null)
+                    {
+                        calculatedModifier.magnitude = modifierInfo.magnitude.customCalculationClass.GetModifierMagnitude();
+                    }
+                    break;
+                case EModifierCalculation.SetByCaller:
+                    if (setByCallerValues.ContainsKey(modifierInfo.magnitude.setByCallerTag))
+                    {
+                        calculatedModifier.magnitude = setByCallerValues[modifierInfo.magnitude.setByCallerTag];
+                    }
+                    break;
+            }
+
+            cachedModifiers.Add(calculatedModifier);
+        }
+    }
 }
 
 [System.Serializable]
@@ -61,8 +102,6 @@ public struct GameplayEffectAttributeModifier
 [CreateAssetMenu(menuName = "Ability System/Gameplay Effect")]
 public class SGameplayEffect : ScriptableObject
 {
-    public enum EEffectDurationPolicy { Instant, Infinite, Duration }
-
     public EEffectDurationPolicy durationPolicy;
     public EffectModifierMagnitudeInfo duration;
     public TagContainer effectTags = new TagContainer();

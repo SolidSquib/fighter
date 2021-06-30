@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player Movement/Movement State/Defaults/Fall")]
 public class SMovement_Fall : SPlayerMovementState
 {
+    public SAttribute moveSpeedAttribute = null;
     [SerializeField] private float _fallingGravityScale = 1.0f;
     [SerializeField] private float _jumpingGravityScale = 1.0f;
     public SPlayerMovementState _landedState;
@@ -42,11 +43,13 @@ public class SMovement_Fall : SPlayerMovementState
     public override void UpdateState(PlayerMovement playerMovement, Vector3 inputVector)
     {
         CharacterController controller = GetCharacterController(playerMovement);
+        AbilitySystem abilitySystem = playerMovement.GetComponent<AbilitySystem>();
+        float moveSpeedModifier = moveSpeedAttribute != null ? abilitySystem.GetAttributeCurrentValue(moveSpeedAttribute) : 1.0f;
 
         bool jumpFrame = inputVector.y > 0;
 
         Vector3 localMovementVector = Fighter.GameplayStatics.ProjectInputVectorToCamera(Camera.main, playerMovement.transform, playerMovement.inputVector);
-        Vector3 movementVector = new Vector3(localMovementVector.x * baseMoveSpeed, controller.velocity.y, localMovementVector.z * baseMoveSpeed);
+        Vector3 movementVector = new Vector3(localMovementVector.x * baseMoveSpeed * moveSpeedModifier, controller.velocity.y, localMovementVector.z * baseMoveSpeed * moveSpeedModifier);
 
         if (jumpFrame)
         {

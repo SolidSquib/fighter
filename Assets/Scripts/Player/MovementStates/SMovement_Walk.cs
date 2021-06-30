@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player Movement/Movement State/Defaults/Walk")]
 public class SMovement_Walk : SPlayerMovementState
 {
+    public SAttribute moveSpeedAttribute = null;
     public float _gravityScale = 1f;
     public SPlayerMovementState _fallingState;
 
@@ -32,9 +33,11 @@ public class SMovement_Walk : SPlayerMovementState
     public override void UpdateState(PlayerMovement playerMovement, Vector3 inputVector)
     {
         CharacterController controller = GetCharacterController(playerMovement);
+        AbilitySystem abilitySystem = playerMovement.GetComponent<AbilitySystem>();
+        float moveSpeedModifier = moveSpeedAttribute != null ? abilitySystem.GetAttributeCurrentValue(moveSpeedAttribute) : 1.0f;
 
         Vector3 localMovementVector = Fighter.GameplayStatics.ProjectInputVectorToCamera(Camera.main, playerMovement.transform, playerMovement.inputVector);
-        Vector3 movementVector = new Vector3(localMovementVector.x * baseMoveSpeed, controller.velocity.y, localMovementVector.z * baseMoveSpeed);
+        Vector3 movementVector = new Vector3(localMovementVector.x * baseMoveSpeed * moveSpeedModifier, controller.velocity.y, localMovementVector.z * baseMoveSpeed * moveSpeedModifier);
         movementVector.y += inputVector.y;
 
         // Apply gravity

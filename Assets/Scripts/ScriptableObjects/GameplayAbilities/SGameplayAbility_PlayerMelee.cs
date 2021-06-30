@@ -11,9 +11,7 @@ public class SGameplayAbility_PlayerMelee : SGameplayAbility
         base.ActivateAbility(payload);
 
         Animator animator = abilitySystem.animator;
-        animator.Play(attackAnim.name);
-        Debug.Log($"{attackAnim.length}");
-        Debug.Log($"{animator.GetCurrentAnimatorClipInfo(0).Length}");
+        animator.SetTrigger("Attack");
         
         abilitySystem.StartCoroutine(EndAfterDelay(attackAnim.length));
     }

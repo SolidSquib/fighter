@@ -22,14 +22,14 @@ public class UIHealthBar : MonoBehaviour
         Uninitialize();
     }
 
-    public void SetHealth(float newHealth)
+    public void SetHealth(AttributeEventArgs newHealth)
     {
-        _slider.value = newHealth;
+        _slider.value = newHealth.attributeValues.currentValue;
     }
 
-    public void SetMaxHealth(float newMaxHealth)
+    public void SetMaxHealth(AttributeEventArgs newMaxHealth)
     {
-        _slider.maxValue = newMaxHealth;
+        _slider.maxValue = newMaxHealth.attributeValues.currentValue;
     }
 
     public void InitializeForCharacter(PlayerCharacter character)

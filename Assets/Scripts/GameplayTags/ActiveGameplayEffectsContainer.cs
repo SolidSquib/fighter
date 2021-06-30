@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class ActiveGameplayEffectsContainer
 {
+    public delegate void ActiveEffectDelegate(ActiveEffectHandle handle, GameplayEffectSpec spec);
+    public ActiveEffectDelegate onActiveEffectRemoved;
+    public ActiveEffectDelegate onActiveEffectAdded;
+
     private int _currentId = 0;
     private AbilitySystem abilitySystem { get; set; }
     private Dictionary<ActiveEffectHandle, GameplayEffectSpec> activeEffectSpecs { get; set; } = new Dictionary<ActiveEffectHandle, GameplayEffectSpec>(); // Infinite and Duration based effects that are currently applied to this ability system.
@@ -26,22 +30,10 @@ public class ActiveGameplayEffectsContainer
                 GameplayEffectSpec spec;
                 if (TryGetSpecFromHandle(handle, out spec))
                 {
-                    spec.effectTemplate.removalTagRequirements.RequirementsMet(abilitySystem.dynamicOwnedTags);
-                }
-            }
-        }
-    }
-
-    public void RemoveEffectsWithTags(TagContainer tags)
-    {
-        if (tags != null)
-        {
-            foreach (var pair in activeEffectSpecs)
-            {
-                GameplayEffectSpec spec = pair.Value;
-                if (spec.effectTemplate.effectTags.AnyTagsMatch(tags))
-                {
-                    // TODO how to handle effect removal?
+                    if (spec.effectTemplate.removalTagRequirements.RequirementsMet(abilitySystem.dynamicOwnedTags))
+                    {
+                        RemoveActiveEffectByHandle(handle);
+                    }
                 }
             }
         }
@@ -113,16 +105,55 @@ public class ActiveGameplayEffectsContainer
             AddTagListener(tag, handle);
         }
 
+        RemoveEffectsWithTags(spec.effectTemplate.removeGameplayEffectsWithTags);
+
+        if (onActiveEffectAdded != null)
+        {
+            onActiveEffectAdded(handle, spec);
+        }
+
         return handle;
     }
 
     public void RemoveExpiredGameplayEffects()
     {
-
+        foreach (var pair in activeEffectSpecs)
+        {
+            GameplayEffectSpec spec = pair.Value;
+            if (spec.effectTemplate.durationPolicy == EEffectDurationPolicy.Duration && (Time.time - spec.applicationTime) >= spec.effectTemplate.duration.baseMagnitude) // TODO this will not account for duration when a custom mod or set by caller is applied.
+            {
+                RemoveActiveEffectByHandle(pair.Key);
+            }
+        }
     }
 
-    protected void OnTagCountChanged(Tag tag, int count)
+    public void RemoveEffectsWithTags(TagContainer tags)
     {
+        if (tags != null)
+        {
+            foreach (var pair in activeEffectSpecs)
+            {
+                GameplayEffectSpec spec = pair.Value;
+                if (spec.effectTemplate.effectTags.AnyTagsMatch(tags))
+                {
+                    RemoveActiveEffectByHandle(pair.Key);
+                }
+            }
+        }
+    }
 
+    public void RemoveActiveEffectByHandle(ActiveEffectHandle handle)
+    {
+        GameplayEffectSpec foundSpec;
+
+        if (activeEffectSpecs.TryGetValue(handle, out foundSpec))
+        {
+            activeEffectSpecs.Remove(handle);
+
+            if (onActiveEffectRemoved != null)
+            {
+                onActiveEffectRemoved(handle, foundSpec);
+            }
+        }
     }
 }
