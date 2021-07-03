@@ -118,13 +118,20 @@ public class ActiveGameplayEffectsContainer
 
     public void RemoveExpiredGameplayEffects()
     {
+        HashSet<ActiveEffectHandle> keysForRemoval = new HashSet<ActiveEffectHandle>();
+
         foreach (var pair in activeEffectSpecs)
         {
             GameplayEffectSpec spec = pair.Value;
             if (spec.effectTemplate.durationPolicy == EEffectDurationPolicy.Duration && (Time.time - spec.applicationTime) >= spec.effectTemplate.duration.baseMagnitude) // TODO this will not account for duration when a custom mod or set by caller is applied.
             {
-                RemoveActiveEffectByHandle(pair.Key);
+                keysForRemoval.Add(pair.Key);
             }
+        }
+
+        foreach (var key in keysForRemoval)
+        {
+            RemoveActiveEffectByHandle(key);
         }
     }
 

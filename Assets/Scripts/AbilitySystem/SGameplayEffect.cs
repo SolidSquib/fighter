@@ -14,8 +14,8 @@ public enum EEffectDurationPolicy { Instant, Infinite, Duration }
 [System.Serializable]
 public struct EffectModifierMagnitudeInfo
 {
-    public EModifierMethod method;
     public EModifierCalculation magnitudeCalculation;
+    public SAttribute attribute;
     public Tag setByCallerTag;
     public float baseMagnitude;
     public SModifierMagnitudeCalculation customCalculationClass;
@@ -63,7 +63,7 @@ public class GameplayEffectSpec
 
         foreach (GameplayEffectAttributeModifier modifierInfo in effectTemplate.modifiers)
         {
-            CachedEffectModifierMagnitude calculatedModifier = new CachedEffectModifierMagnitude() { attribute = modifierInfo.attribute, method = modifierInfo.magnitude.method };
+            CachedEffectModifierMagnitude calculatedModifier = new CachedEffectModifierMagnitude() { attribute = modifierInfo.attribute, method = modifierInfo.method };
 
             switch (modifierInfo.magnitude.magnitudeCalculation)
             {
@@ -96,6 +96,7 @@ public class GameplayEffectSpec
 public struct GameplayEffectAttributeModifier
 {
     public SAttribute attribute;
+    public EModifierMethod method;
     public EffectModifierMagnitudeInfo magnitude;
 }
 

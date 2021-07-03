@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   durationPolicy: 1
   duration:
-    method: 0
     magnitudeCalculation: 0
+    attribute: {fileID: 0}
     setByCallerTag: {fileID: 0}
-    baseMagnitude: 0
+    baseMagnitude: 5
     customCalculationClass: {fileID: 0}
   effectTags:
     _list: []
@@ -43,9 +43,10 @@ MonoBehaviour:
     _list: []
   modifiers:
   - attribute: {fileID: 11400000, guid: de91505b0b6f59e4ea9f1f9c14b27c61, type: 2}
+    method: 3
     magnitude:
-      method: 3
       magnitudeCalculation: 0
+      attribute: {fileID: 0}
       setByCallerTag: {fileID: 0}
       baseMagnitude: 0
       customCalculationClass: {fileID: 0}

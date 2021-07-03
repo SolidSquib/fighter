@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   durationPolicy: 0
   duration:
-    method: 0
     magnitudeCalculation: 0
+    attribute: {fileID: 0}
     setByCallerTag: {fileID: 0}
     baseMagnitude: 0
     customCalculationClass: {fileID: 0}
@@ -42,23 +42,26 @@ MonoBehaviour:
     _list: []
   modifiers:
   - attribute: {fileID: 11400000, guid: f47ea8232fba3724f961f33155bc57ec, type: 2}
+    method: 3
     magnitude:
-      method: 3
       magnitudeCalculation: 0
+      attribute: {fileID: 0}
       setByCallerTag: {fileID: 0}
       baseMagnitude: 100
       customCalculationClass: {fileID: 0}
   - attribute: {fileID: 11400000, guid: 336b7fdb35154cb4396a154bb3fd5c59, type: 2}
+    method: 3
     magnitude:
-      method: 3
       magnitudeCalculation: 0
+      attribute: {fileID: 0}
       setByCallerTag: {fileID: 0}
       baseMagnitude: 100
       customCalculationClass: {fileID: 0}
   - attribute: {fileID: 11400000, guid: de91505b0b6f59e4ea9f1f9c14b27c61, type: 2}
+    method: 3
     magnitude:
-      method: 3
       magnitudeCalculation: 0
+      attribute: {fileID: 0}
       setByCallerTag: {fileID: 0}
       baseMagnitude: 1
       customCalculationClass: {fileID: 0}
