@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Movement_Walk
   m_EditorClassIdentifier: 
   _baseMoveSpeed: 3
+  moveSpeedAttribute: {fileID: 11400000, guid: de91505b0b6f59e4ea9f1f9c14b27c61, type: 2}
   _gravityScale: 5
   _fallingState: {fileID: 11400000, guid: 974a32a4dc72d704db85e3c72d9c41b8, type: 2}

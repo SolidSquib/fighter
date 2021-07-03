@@ -16,6 +16,8 @@ MonoBehaviour:
   _children:
   - {fileID: -1182518005315392098}
   - {fileID: 7167246827903787537}
+  - {fileID: 8787445127992453718}
+  - {fileID: 606068150580164239}
 --- !u!114 &-2318194874202770557
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -31,6 +33,7 @@ MonoBehaviour:
   _parent: {fileID: -54573944871376683}
   _children:
   - {fileID: -2292766013060212101}
+  - {fileID: 2112796527347332360}
 --- !u!114 &-2292766013060212101
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -91,13 +94,44 @@ MonoBehaviour:
   _elements:
   - {fileID: -54573944871376683}
   - {fileID: -3158084087456370397}
-  - {fileID: -1182518005315392098}
-  - {fileID: 7167246827903787537}
   - {fileID: -2318194874202770557}
-  - {fileID: -2292766013060212101}
   - {fileID: 8666637216102479730}
+  - {fileID: -1182518005315392098}
+  - {fileID: -2292766013060212101}
   - {fileID: 6245496306291847423}
+  - {fileID: 7167246827903787537}
+  - {fileID: 2112796527347332360}
+  - {fileID: 8787445127992453718}
+  - {fileID: 606068150580164239}
   _root: {fileID: -54573944871376683}
+--- !u!114 &606068150580164239
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9488ff22c7852498aa0d21f7b6b5fb, type: 3}
+  m_Name: MovementBlocked
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3158084087456370397}
+  _children: []
+--- !u!114 &2112796527347332360
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9488ff22c7852498aa0d21f7b6b5fb, type: 3}
+  m_Name: Attack
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -2318194874202770557}
+  _children: []
 --- !u!114 &6245496306291847423
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -141,3 +175,17 @@ MonoBehaviour:
   _parent: {fileID: -54573944871376683}
   _children:
   - {fileID: 6245496306291847423}
+--- !u!114 &8787445127992453718
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9488ff22c7852498aa0d21f7b6b5fb, type: 3}
+  m_Name: IsAttacking
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3158084087456370397}
+  _children: []

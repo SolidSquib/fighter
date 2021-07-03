@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerMovement))]
 public class PlayerCharacter : MonoBehaviour
 {
+    [SerializeField] GameplayDebuggerUI gameplayDebugger;
     public Animator animator { get; protected set; }
     public AbilitySystem abilitySystem { get; protected set; }
     public PlayerMovement playerMovement { get; protected set; }
@@ -25,12 +26,23 @@ public class PlayerCharacter : MonoBehaviour
         GetComponent<PlayerInput>().onActionTriggered += HandleInputAction;
     }
 
+    void Start()
+    {
+        if (gameplayDebugger != null)
+        {
+            gameplayDebugger.BindAbilitySystemEvents(abilitySystem);
+            gameplayDebugger.gameObject.SetActive(false);
+        }
+    }
+
     private void HandleInputAction(InputAction.CallbackContext context)
     {
-        if (context.action.name == "Dash")
+        if (context.action.name == "GameplayDebugger" && context.performed)
         {
-            /* Vector2 stickValue = context.ReadValue<Vector2>();
-            AbilityStatics.SendGameplayEventToAbilitySystem(abilitySystem, ) */
+            if (gameplayDebugger != null)
+            {
+                gameplayDebugger.gameObject.SetActive(!gameplayDebugger.gameObject.activeInHierarchy);
+            }
         }
         else if (context.action.name == "Move")
         {

@@ -78,9 +78,12 @@ public class AbilitySystem : MonoBehaviour
 {
     public delegate void AbilityDelegate(SGameplayAbility ability);
     public delegate void GameplayEventNotify(Tag eventTag, GameplayEventData eventData);
+
     public AbilityDelegate onAbilityEnded;
     public AbilityDelegate onAbilityActivated;
     public AbilityDelegate onAbilityActivationFailed;
+    public ActiveEffectDelegate onActiveEffectAdded;
+    public ActiveEffectDelegate onActiveEffectRemoved;
     private Dictionary<Tag, GameplayEventNotify> _genericGameplayEventCallbacks;
     private SAttributeSet _attributeSetInstance;
     private ActiveGameplayEffectsContainer _activeGameplayEffects = null;
@@ -89,7 +92,8 @@ public class AbilitySystem : MonoBehaviour
     public Animator animator { get; private set; }
     public GameObject owner { get; private set; }
     public GameObject avatar { get; private set; }
-    public GameObject abilitySystemObject { get; private set; }
+    public SAttributeSet attributeSetInstance { get { return _attributeSetInstance; } private set { _attributeSetInstance = value; } }
+    public SAttributeSet attributeSet { get { return _attributeSet; } private set { _attributeSet = value; } }
     public bool initialized { get; private set; }
     CountingTagContainer _dynamicOwnedTags = new CountingTagContainer();
     CountingTagContainer _activationBlockedTags = new CountingTagContainer();
@@ -116,6 +120,16 @@ public class AbilitySystem : MonoBehaviour
             Debug.LogWarning("No PlayerInput object found on the part of an AbilitySystem. Abilities will not be activated by input.");
         }
 
+        _activeGameplayEffects = new ActiveGameplayEffectsContainer(this);
+        _activeGameplayEffects.onActiveEffectAdded += HandleActiveEffectAdded;
+        _activeGameplayEffects.onActiveEffectRemoved += HandleActiveEffectRemoved;
+
+        if (_attributeSet != null)
+        {
+            _attributeSetInstance = ScriptableObject.Instantiate(_attributeSet);
+            _attributeSetInstance.Initialize(this);
+        }
+
         foreach (var ability in _startupAbilities)
         {
             if (ability.ability != null)
@@ -134,14 +148,6 @@ public class AbilitySystem : MonoBehaviour
                 ApplyGameplayEffectToSelf(effect);
             }
         }
-
-        if (_attributeSet != null)
-        {
-            _attributeSetInstance = ScriptableObject.Instantiate(_attributeSet);
-        }
-
-        _activeGameplayEffects = new ActiveGameplayEffectsContainer(this);
-        _activeGameplayEffects.onActiveEffectRemoved += HandleActiveEffectRemoved;
     }
 
     private void Update()
@@ -160,10 +166,6 @@ public class AbilitySystem : MonoBehaviour
         owner = newOwner;
         avatar = newAvatar;
         animator = newAvatar.GetComponentInChildren<Animator>();
-
-        GameObject dummy = new GameObject("AbilitySystemGameObject");
-        abilitySystemObject = Instantiate(dummy, owner.transform);
-
         initialized = true;
     }
 
@@ -338,6 +340,12 @@ public class AbilitySystem : MonoBehaviour
     {
         spec.ability.onAbilityEnded = NotifyAbilityEnded;
         _dynamicOwnedTags.AddTags(spec.abilityTemplate.activationOwnedTags);
+        
+        if (onAbilityActivated != null)
+        {
+            onAbilityActivated(spec.ability);
+        }
+        
         spec.ability.ActivateAbility(payload);
     }
 
@@ -469,8 +477,6 @@ public class AbilitySystem : MonoBehaviour
             ActiveEffectHandle handle = _activeGameplayEffects.AddActiveGameplayEffect(spec);
             _attributeSetInstance.ApplyActiveEffectSpec(spec);
 
-            dynamicOwnedTags.AddTags(spec.effectTemplate.grantedTags);
-
             return handle;
         }
 
@@ -487,9 +493,31 @@ public class AbilitySystem : MonoBehaviour
         return ActiveEffectHandle.Invalid;
     }
 
+    public void RemoveActiveEffectByHandle(ActiveEffectHandle handle)
+    {
+        _activeGameplayEffects.RemoveActiveEffectByHandle(handle);
+    }
+
+    protected void HandleActiveEffectAdded(ActiveEffectHandle handle, GameplayEffectSpec spec)
+    {
+        dynamicOwnedTags.AddTags(spec.effectTemplate.grantedTags);
+
+        if (onActiveEffectAdded != null)
+        {
+            onActiveEffectAdded(handle, spec);
+        }
+    }
+
     protected void HandleActiveEffectRemoved(ActiveEffectHandle handle, GameplayEffectSpec spec)
     {
         dynamicOwnedTags.RemoveTags(spec.effectTemplate.grantedTags);
+
+        _attributeSetInstance.RemoveActiveEffectSpec(spec);
+
+        if (onActiveEffectRemoved != null)
+        {
+            onActiveEffectRemoved(handle, spec);
+        }
     }
 
     public float GetAttributeCurrentValue(SAttribute attribute)

@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void ActiveEffectDelegate(ActiveEffectHandle handle, GameplayEffectSpec spec);
+
 public class ActiveGameplayEffectsContainer
-{
-    public delegate void ActiveEffectDelegate(ActiveEffectHandle handle, GameplayEffectSpec spec);
+{    
     public ActiveEffectDelegate onActiveEffectRemoved;
     public ActiveEffectDelegate onActiveEffectAdded;
 

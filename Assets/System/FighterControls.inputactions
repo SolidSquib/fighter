@@ -36,6 +36,14 @@
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "MultiTap"
+                },
+                {
+                    "name": "GameplayDebugger",
+                    "type": "Button",
+                    "id": "2e7e8f28-b1b5-4b40-92af-3b30428d7483",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -181,6 +189,17 @@
                     "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "67eecd38-ef8b-4789-b219-d4861605d3ef",
+                    "path": "<Keyboard>/quote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "GameplayDebugger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

@@ -113,5 +113,6 @@ public sealed class CountingTagEventArgs : System.EventArgs
     public CountingTagEventArgs(Tag oTag, int count)
     {
         _tag = oTag;
+        _count = count;
     }
 }

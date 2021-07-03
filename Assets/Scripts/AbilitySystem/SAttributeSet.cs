@@ -40,9 +40,12 @@ public class SAttributeSet : ScriptableObject
     private HashSet<SAttribute> _dirtyAttributes = new HashSet<SAttribute>();
     private AbilitySystem _abilitySystem;
     public bool isInitialized { get; private set; }
+    public List<SAttribute> attributes { get { return _attributes; } private set { _attributes = value; } }
 
     public void Initialize(AbilitySystem owner)
     {
+        _abilitySystem = owner;
+
         foreach (var attribute in _attributes)
         {
             _currentAttributeValues.Add(attribute, new AttributeInstance());
@@ -136,7 +139,7 @@ public class SAttributeSet : ScriptableObject
         AttributeEventHandler handler;
         if (_attributeModifiedCallbacks.TryGetValue(attribute, out handler))
         {
-            if (handler == null)
+            if (handler != null)
             {
                 handler(new AttributeEventArgs(attribute, _currentAttributeValues[attribute], _abilitySystem));
             }
@@ -145,7 +148,7 @@ public class SAttributeSet : ScriptableObject
 
     protected void OnAttributeDependencyUpdated(AttributeEventArgs args)
     {
-        
+
     }
 
     /// <summary>
@@ -190,9 +193,11 @@ public class SAttributeSet : ScriptableObject
                     attributeInstance.baseValue = Mathf.Min(attributeInstance.baseValue, attributeCapInstance.currentValue);
                 }
 
-                NotifyAttributeUpdatedListeners(modifier.attribute);
+                _dirtyAttributes.Add(modifier.attribute);
             }
         }
+
+        RecalculateCurrentAttributeValues();
     }
 
     public void ApplyActiveEffectSpec(GameplayEffectSpec spec)
@@ -214,10 +219,12 @@ public class SAttributeSet : ScriptableObject
     protected void RecalculateCurrentAttributeValues()
     {
         // TODO this function could do with some optimization at some point...
+        List<float> previousValues = new List<float>();
 
         // reset the current values on all attributes.
         foreach (var attribute in _currentAttributeValues)
         {
+            previousValues.Add(attribute.Value.currentValue);
             attribute.Value.currentValue = attribute.Value.baseValue;
         }
 
@@ -249,10 +256,19 @@ public class SAttributeSet : ScriptableObject
                     {
                         attributeInstance.currentValue = Mathf.Min(attributeInstance.currentValue, attributeCapInstance.currentValue);
                     }
-
-                    NotifyAttributeUpdatedListeners(modifier.attribute);
                 }
             }
+        }
+
+        int i = 0;
+        foreach (var attribute in _currentAttributeValues)
+        {
+            if (previousValues[i] != attribute.Value.currentValue)
+            {
+                _dirtyAttributes.Add(attribute.Key);
+            }
+
+            i+=1;
         }
     }
 

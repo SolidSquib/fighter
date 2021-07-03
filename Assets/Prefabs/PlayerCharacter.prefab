@@ -203,6 +203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9147a4a3450c38044963269ade93b2bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameplayDebugger: {fileID: 0}
 --- !u!114 &2157829443408683587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,16 +216,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9718c59a6f22abc48b1eb518cd1a925b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startupAbilities:
+  _startupAbilities:
   - ability: {fileID: 11400000, guid: ad97f9dfc9ea8864895e34a14ea78cdb, type: 2}
     inputActionBinding: Jump
-    removalPolicy: 0
-  - ability: {fileID: 11400000, guid: c7fbbae9961a85b40be5beaf2e817938, type: 2}
-    inputActionBinding: Dash
     removalPolicy: 0
   - ability: {fileID: 11400000, guid: cb5baf85aaa96614ca5fb63cca63a0a2, type: 2}
     inputActionBinding: LightAttack
     removalPolicy: 0
+  _startupEffects:
+  - {fileID: 11400000, guid: 5817c578d11f50640b7a709e0def4096, type: 2}
+  _attributeSet: {fileID: 11400000, guid: bde93d131f4fbad49906c887fda501b9, type: 2}
 --- !u!114 &2157829443408683614
 MonoBehaviour:
   m_ObjectHideFlags: 0
