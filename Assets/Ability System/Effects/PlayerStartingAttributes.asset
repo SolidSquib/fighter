@@ -53,10 +53,11 @@ MonoBehaviour:
     method: 3
     magnitude:
       magnitudeCalculation: 0
-      attribute: {fileID: 0}
+      attribute: {fileID: 11400000, guid: f47ea8232fba3724f961f33155bc57ec, type: 2}
       setByCallerTag: {fileID: 0}
       baseMagnitude: 100
-      customCalculationClass: {fileID: 0}
+      customCalculationClass: {fileID: 11400000, guid: 46ac054648f11224a93cada83301c3c8,
+        type: 2}
   - attribute: {fileID: 11400000, guid: de91505b0b6f59e4ea9f1f9c14b27c61, type: 2}
     method: 3
     magnitude:

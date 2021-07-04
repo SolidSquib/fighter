@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Animancer;
 
 [CreateAssetMenu(menuName = "Ability System/Gameplay Ability/Player Melee")]
 public class SGameplayAbility_PlayerMelee : SGameplayAbility
@@ -17,11 +18,16 @@ public class SGameplayAbility_PlayerMelee : SGameplayAbility
         Animator animator = abilitySystem.animator;
         animator.SetTrigger("Attack");
 
-        abilitySystem.StartCoroutine(EndAfterDelay(attackAnim.length));
+        AnimancerComponent animancer = abilitySystem.GetComponentInChildren<AnimancerComponent>();
+        var state = animancer.Play(attackAnim);
+        state.Events.OnEnd = OnAnimationEnd;
+
+        //abilitySystem.StartCoroutine(EndAfterDelay(attackAnim.length));        
 
         if (stopMovementEffect != null)
         {
-            _stopMovementEffectHandle = abilitySystem.ApplyGameplayEffectToSelf(stopMovementEffect);
+            GameplayEffectSpec spec = abilitySystem.MakeGameplayEffectSpec(stopMovementEffect);
+            _stopMovementEffectHandle = abilitySystem.ApplyGameplayEffectSpecToSelf(spec);
         }
     }
 
@@ -30,6 +36,11 @@ public class SGameplayAbility_PlayerMelee : SGameplayAbility
         base.EndAbility(wasCancelled);
 
         abilitySystem.RemoveActiveEffectByHandle(_stopMovementEffectHandle);
+    }
+
+    void OnAnimationEnd()
+    {
+        EndAbility(false);
     }
 
     IEnumerator EndAfterDelay(float delay)

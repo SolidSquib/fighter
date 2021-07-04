@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CreateAssetMenu(menuName="Ability System/Gameplay Ability/Jump")]
-public class GameplayAbility_Jump : SGameplayAbility
+public class SGameplayAbility_Jump : SGameplayAbility
 {
     public override void ActivateAbility(GameplayEventData payload)
     {
