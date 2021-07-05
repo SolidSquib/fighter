@@ -40,6 +40,8 @@ public abstract class SGameplayAbility : ScriptableObject
     public bool isActive { get { return _spec.active; } }
     public GameplayEventData eventData { get { return _eventData; } private set { _eventData = value; } }
 
+    public virtual void InitializeAbility() {}
+
     public virtual void ActivateAbility(GameplayEventData payload)
     {
         _spec.active = true;

@@ -213,6 +213,7 @@ public class AbilitySystem : MonoBehaviour
         newSpec.ability.spec = newSpec;
         newSpec.abilityTemplate = abilityToGrant.ability;
         newSpec.removalPolicy = abilityToGrant.removalPolicy;
+        newSpec.ability.InitializeAbility();
 
         _ownedAbilities.Add(newSpec);
 

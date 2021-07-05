@@ -55,6 +55,15 @@ public class PlayerCharacter : MonoBehaviour
     void Update()
     {
         UpdateAnimation();
+
+        Transform attackOrigin;
+        SpriteAttachments attachments = GetComponentInChildren<SpriteAttachments>();
+        if (attachments != null && attachments.attachments.TryGetValue("AttackOrigin", out attackOrigin))
+        {
+            Vector3 amendedPosition = attachments.transform.position;
+            
+            DebugExtension.DebugWireSphere(attackOrigin.position, Color.red, 0.5f, 0, true);
+        }
     }
 
     public bool CanJump()

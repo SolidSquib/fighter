@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 018e294213e1589498ceec9ea6def8ac, type: 3}
+  m_Name: StopMovement
+  m_EditorClassIdentifier: 
+  durationPolicy: 1
+  duration:
+    magnitudeCalculation: 0
+    attribute: {fileID: 0}
+    setByCallerTag: {fileID: 0}
+    baseMagnitude: 5
+    customCalculationClass: {fileID: 0}
+  effectTags:
+    _list: []
+  grantedTags:
+    _list:
+    - {fileID: 606068150580164239, guid: 8161edde4a7592544a9e29f39e194969, type: 2}
+  ongoingTagRequirements:
+    required:
+      _list: []
+    ignored:
+      _list: []
+  applicationTagRequirements:
+    required:
+      _list: []
+    ignored:
+      _list: []
+  removalTagRequirements:
+    required:
+      _list: []
+    ignored:
+      _list: []
+  removeGameplayEffectsWithTags:
+    _list: []
+  modifiers:
+  - attribute: {fileID: 11400000, guid: de91505b0b6f59e4ea9f1f9c14b27c61, type: 2}
+    method: 3
+    magnitude:
+      magnitudeCalculation: 0
+      attribute: {fileID: 0}
+      setByCallerTag: {fileID: -2318194874202770557, guid: 8161edde4a7592544a9e29f39e194969,
+        type: 2}
+      baseMagnitude: 0
+      customCalculationClass: {fileID: 0}
+  grantedAbilities: []
