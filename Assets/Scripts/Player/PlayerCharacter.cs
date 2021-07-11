@@ -6,13 +6,18 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(AbilitySystem))]
 [RequireComponent(typeof(PlayerMovement))]
-public class PlayerCharacter : MonoBehaviour
+public class PlayerCharacter : MonoBehaviour, IGameplayTagOwner
 {
     [SerializeField] GameplayDebuggerUI gameplayDebugger;
+    [SerializeField] SCharacterData _characterData;
+
+    public SCharacterData characterData { get; private set; }
     public Animator animator { get; protected set; }
     public AbilitySystem abilitySystem { get; protected set; }
     public PlayerMovement playerMovement { get; protected set; }
     public CharacterController characterController { get; private set; }
+
+    public TagContainer gameplayTags { get { return abilitySystem != null ? abilitySystem.gameplayTags : null; } }
 
     // Start is called before the first frame update
     private void Awake()
@@ -31,7 +36,8 @@ public class PlayerCharacter : MonoBehaviour
         if (gameplayDebugger != null)
         {
             gameplayDebugger.BindAbilitySystemEvents(abilitySystem);
-            gameplayDebugger.gameObject.SetActive(false);
+            gameplayDebugger.gameObject.SetActive(true);
+            gameplayDebugger.GetComponent<Animator>().SetBool("isOpen", false);
         }
     }
 
@@ -41,7 +47,8 @@ public class PlayerCharacter : MonoBehaviour
         {
             if (gameplayDebugger != null)
             {
-                gameplayDebugger.gameObject.SetActive(!gameplayDebugger.gameObject.activeInHierarchy);
+                Animator animator = gameplayDebugger.GetComponent<Animator>();
+                animator.SetBool("isOpen", !animator.GetBool("isOpen"));
             }
         }
         else if (context.action.name == "Move")
@@ -55,15 +62,6 @@ public class PlayerCharacter : MonoBehaviour
     void Update()
     {
         UpdateAnimation();
-
-        Transform attackOrigin;
-        SpriteAttachments attachments = GetComponentInChildren<SpriteAttachments>();
-        if (attachments != null && attachments.attachments.TryGetValue("AttackOrigin", out attackOrigin))
-        {
-            Vector3 amendedPosition = attachments.transform.position;
-            
-            DebugExtension.DebugWireSphere(attackOrigin.position, Color.red, 0.5f, 0, true);
-        }
     }
 
     public bool CanJump()

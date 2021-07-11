@@ -74,7 +74,7 @@ public struct ActiveEffectHandle
     public static ActiveEffectHandle Invalid = new ActiveEffectHandle { id = -1, source = null, target = null };
 }
 
-public class AbilitySystem : MonoBehaviour
+public class AbilitySystem : MonoBehaviour, IGameplayTagOwner
 {
     public delegate void AbilityDelegate(SGameplayAbility ability);
     public delegate void GameplayEventNotify(Tag eventTag, GameplayEventData eventData);
@@ -100,6 +100,7 @@ public class AbilitySystem : MonoBehaviour
 
     public CountingTagContainer dynamicOwnedTags { get { return _dynamicOwnedTags; } private set { _dynamicOwnedTags = value; } }
     public CountingTagContainer activationBlockedTags { get { return _activationBlockedTags; } private set { _activationBlockedTags = value; } }
+    public TagContainer gameplayTags { get { return _dynamicOwnedTags; } }
 
     List<ActiveAbilitySpec> _ownedAbilities = new List<ActiveAbilitySpec>();
     Dictionary<string, List<ActiveAbilitySpec>> _inputBoundAbilities = new Dictionary<string, List<ActiveAbilitySpec>>();

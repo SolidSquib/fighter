@@ -9,6 +9,11 @@ public class UIHealthBar : MonoBehaviour
     public SAttribute _healthAttribute;
     public PlayerCharacter _character;
 
+    private void Start()
+    {
+        InitializeForCharacter(_character);
+    }
+
     private void OnEnable()
     {
         if (_character)

@@ -33,6 +33,7 @@ MonoBehaviour:
   tagTriggers: []
   activatedAbilityWhenGranted: 0
   stopMovementEffect: {fileID: 11400000, guid: 1a4e8196ef1cb4c4dbcf33b5ca40363e, type: 2}
+  damageEffect: {fileID: 11400000, guid: aeb88e907a635764eafc9a171aa6f65a, type: 2}
   comboAnims:
   - _FadeDuration: 0
     _Events:
@@ -40,7 +41,7 @@ MonoBehaviour:
       - Damage
       - ComboWindowOpen
       _NormalizedTimes:
-      - 0.25
+      - 0.3
       - 0.75
       - NaN
       _Callbacks: []
@@ -53,7 +54,7 @@ MonoBehaviour:
       - Damage
       - ComboWindowOpen
       _NormalizedTimes:
-      - 0.25
+      - 0.3
       - 0.75
       - NaN
       _Callbacks: []
@@ -66,7 +67,7 @@ MonoBehaviour:
       - Damage
       - ComboWindowOpen
       _NormalizedTimes:
-      - 0.25
+      - 0.3
       - 0.75
       - NaN
       _Callbacks: []
@@ -74,3 +75,5 @@ MonoBehaviour:
     _Speed: 1
     _NormalizedStartTime: NaN
   comboBufferTime: 0.2
+  damageAreaTraceRadius: 0.2
+  drawAttackTrace: 0

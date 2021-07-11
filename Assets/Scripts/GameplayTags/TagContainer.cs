@@ -75,19 +75,19 @@ public class TagContainer : ListWrapper<Tag> {
 
 
     #region MANAGEMENT_FUNCTIONS
-    public void AddTag (Tag oTag) {
+    public virtual void AddTag (Tag oTag) {
         if (oTag != null && !list.Contains(oTag)) {
             list.Add(oTag);
             TriggerTagAdded(oTag);
         }
 	}
-	public void RemoveTag (Tag oTag) {
+	public virtual void RemoveTag (Tag oTag) {
         if (oTag != null && list.Contains(oTag)) {
             list.Remove(oTag);
             TriggerTagRemoved(oTag);
         }
     }
-    public void RemoveTagAndChildren (Tag oTag) {
+    public virtual void RemoveTagAndChildren (Tag oTag) {
         if (oTag != null && list.Contains(oTag)) {
             List<Tag> oTags = list.FindAll(o => o.IsChildOf(oTag));
 
@@ -97,16 +97,16 @@ public class TagContainer : ListWrapper<Tag> {
             }
         }
     }
-    public void ClearTags() {
+    public virtual void ClearTags() {
         list.Clear();
     }
 
-    public void AddTags (TagContainer oContainer) {
+    public virtual void AddTags (TagContainer oContainer) {
 		for (int i = 0; i < oContainer.list.Count; ++i) {
 			AddTag (oContainer.list[i]);
 		}
 	}
-	public void RemoveTags (TagContainer oContainer) {
+	public virtual void RemoveTags (TagContainer oContainer) {
 		for (int i = 0; i < oContainer.list.Count; ++i) {
 			RemoveTag (oContainer.list[i]);
 		}
@@ -127,11 +127,6 @@ public struct TagRequirementsContainer
 
     public bool RequirementsMet(TagContainer tags)
     {
-        return tags.AllTagsMatch(required) && tags.NoTagsMatch(ignored);
-    }
-
-    public bool RequirementsMet(CountingTagContainer tags)
-    {
-        return tags.AllTagsMatch(required) && tags.NoTagsMatch(ignored);
+        return IsEmpty() || (tags.AllTagsMatch(required) && tags.NoTagsMatch(ignored));
     }
 }

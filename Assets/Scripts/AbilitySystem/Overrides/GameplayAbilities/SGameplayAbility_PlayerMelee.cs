@@ -8,8 +8,11 @@ public class SGameplayAbility_PlayerMelee : SGameplayAbility
 {
     [Header("Player Melee Properties")]
     public SGameplayEffect stopMovementEffect;
+    public SGameplayEffect damageEffect;
     public ClipState.Transition[] comboAnims;
     public float comboBufferTime = 0.2f;
+    public float damageAreaTraceRadius = 0.5f;
+    public bool drawAttackTrace = false;
 
     ActiveEffectHandle _stopMovementEffectHandle;
     HybridAnimancerComponent _animancer;
@@ -81,13 +84,24 @@ public class SGameplayAbility_PlayerMelee : SGameplayAbility
 
     void OnDamageEvent()
     {
-        /* Transform attackOrigin;
+        Transform attackOrigin;
         if (_spriteAttachments != null && _spriteAttachments.attachments.TryGetValue("AttackOrigin", out attackOrigin))
         {
             Vector3 amendedPosition = _spriteAttachments.transform.position;
+            Collider[] meleeHits = Physics.OverlapSphere(attackOrigin.position, damageAreaTraceRadius);
+
+            foreach (Collider col in meleeHits)
+            {
+                Debug.Log($"Melee hit on {col.gameObject.name}");
+            }
             
-            DebugExtension.DebugWireSphere(attackOrigin.position, Color.red, 10, 100,false);
-        } */
+            //abilitySystem.ApplyGameplayEffectToSelf(damageEffect);
+            
+            if (drawAttackTrace)
+            {
+                DebugExtension.DebugWireSphere(attackOrigin.position, Color.red, damageAreaTraceRadius, 2, false);
+            }
+        }
     }
 
     public override void EndAbility(bool wasCancelled)
