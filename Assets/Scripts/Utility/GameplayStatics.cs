@@ -11,10 +11,7 @@ namespace Fighter
         {
             if (!targetCamera.orthographic)
             {
-                Vector3 screenPoint = targetCamera.WorldToScreenPoint(referenceTransform.position);
-                Ray ray = targetCamera.ScreenPointToRay(screenPoint);
-                Vector3 forwardDirection = ray.direction;
-                forwardDirection.y = 0;
+                Vector3 forwardDirection = GetProjectedForwardVector(targetCamera, referenceTransform);
 
                 Vector3 forwardMovement = forwardDirection * inputVector.z;
                 inputVector.z = 0;
@@ -22,6 +19,16 @@ namespace Fighter
             }
 
             return inputVector;
+        }
+
+        public static Vector3 GetProjectedForwardVector(Camera targetCamera, Transform referenceTransform)
+        {
+            Vector3 screenPoint = targetCamera.WorldToScreenPoint(referenceTransform.position);
+            Ray ray = targetCamera.ScreenPointToRay(screenPoint);
+            Vector3 forwardDirection = ray.direction;
+            forwardDirection.y = 0;
+
+            return forwardDirection.normalized;
         }
     }
 }
