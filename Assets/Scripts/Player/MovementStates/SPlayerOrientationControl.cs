@@ -9,7 +9,6 @@ public abstract class SPlayerOrientationControl : ScriptableObject
     public void OrientPlayer(PlayerMovement playerMovement)
     {
         Vector3 lookAtDirection = GetLookAtDirection(playerMovement);
-        playerMovement.transform.forward = lookAtDirection.normalized;
-        //playerMovement.transform.LookAt(playerMovement.transform.position + lookAtDirection.normalized);
+        playerMovement.transform.forward = lookAtDirection.normalized;        
     }
 }

@@ -37,6 +37,7 @@ public class SMovement_Walk : SPlayerMovementState
         float moveSpeedModifier = moveSpeedAttribute != null ? abilitySystem.GetAttributeCurrentValue(moveSpeedAttribute) : 1.0f;
 
         Vector3 localMovementVector = Fighter.GameplayStatics.ProjectInputVectorToCamera(Camera.main, playerMovement.transform, playerMovement.inputVector);
+        
         Vector3 movementVector = new Vector3(localMovementVector.x * baseMoveSpeed * moveSpeedModifier, controller.velocity.y, localMovementVector.z * baseMoveSpeed * moveSpeedModifier);
         movementVector.y += inputVector.y;
 

@@ -22,7 +22,7 @@ public class SingletonScriptBase<T> : MonoBehaviour where T : Component
         }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (_instance == null)
         {

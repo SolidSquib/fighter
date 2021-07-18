@@ -74,10 +74,10 @@ public class CameraConfine : MonoBehaviour
         extremities[2] = collider.transform.position - (Vector3.up * (Mathf.Max(collider.radius, collider.height) / 2f));
         extremities[3] = collider.transform.position + (Vector3.up * (Mathf.Max(collider.radius, collider.height) / 2f));
 
-        foreach (Vector3 point in extremities)
+        /* foreach (Vector3 point in extremities)
         {
             DebugExtension.DebugPoint(point, Color.red);
-        }
+        } */
 
         return extremities;
     }
