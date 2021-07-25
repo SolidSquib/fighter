@@ -5,7 +5,7 @@ using UnityEngine;
 public delegate void ActiveEffectDelegate(ActiveEffectHandle handle, GameplayEffectSpec spec);
 
 public class ActiveGameplayEffectsContainer
-{    
+{
     public ActiveEffectDelegate onActiveEffectRemoved;
     public ActiveEffectDelegate onActiveEffectAdded;
 
@@ -84,7 +84,6 @@ public class ActiveGameplayEffectsContainer
 
         spec.applicationTime = Time.time;
         ActiveEffectHandle handle = CreateNewActiveSpecHandle(spec);
-        activeEffectSpecs.Add(handle, spec);
 
         foreach (Tag tag in spec.effectTemplate.removalTagRequirements.required.list)
         {
@@ -113,6 +112,8 @@ public class ActiveGameplayEffectsContainer
             onActiveEffectAdded(handle, spec);
         }
 
+        activeEffectSpecs.Add(handle, spec);
+
         return handle;
     }
 
@@ -123,7 +124,7 @@ public class ActiveGameplayEffectsContainer
         foreach (var pair in activeEffectSpecs)
         {
             GameplayEffectSpec spec = pair.Value;
-            if (spec.effectTemplate.durationPolicy == EEffectDurationPolicy.Duration && (Time.time - spec.applicationTime) >= spec.effectTemplate.duration.baseMagnitude) // TODO this will not account for duration when a custom mod or set by caller is applied.
+            if (spec.effectTemplate.durationPolicy == EEffectDurationPolicy.Duration && (Time.time - spec.applicationTime) >= spec.cachedDuration)
             {
                 keysForRemoval.Add(pair.Key);
             }
@@ -139,13 +140,20 @@ public class ActiveGameplayEffectsContainer
     {
         if (tags != null)
         {
+            HashSet<ActiveEffectHandle> keysForRemoval = new HashSet<ActiveEffectHandle>();
+
             foreach (var pair in activeEffectSpecs)
             {
                 GameplayEffectSpec spec = pair.Value;
                 if (spec.effectTemplate.effectTags.AnyTagsMatch(tags))
                 {
-                    RemoveActiveEffectByHandle(pair.Key);
+                    keysForRemoval.Add(pair.Key);
                 }
+            }
+
+            foreach (var key in keysForRemoval)
+            {
+                RemoveActiveEffectByHandle(key);
             }
         }
     }

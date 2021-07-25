@@ -36,6 +36,7 @@ public class GameplayEffectSpec
     public SGameplayEffect effectTemplate { get; private set; } = null;
     public float applicationTime { get; set; } = 0;
 
+    public float cachedDuration = 0.0f;
     public List<CachedEffectModifierMagnitude> cachedModifiers = new List<CachedEffectModifierMagnitude>();
 
     public GameplayEffectSpec(AbilitySystem source, SGameplayEffect effect)
@@ -49,6 +50,39 @@ public class GameplayEffectSpec
         this.source = source;
         this.target = target;
         this.effectTemplate = effect;
+    }
+
+    public void RecalculateDurationMagnitude(AbilitySystem owner)
+    {
+        if (owner == null)
+        {
+            Debug.LogWarning("Owning Ability System required to calculate duration.");
+            return;
+        }
+
+        cachedDuration = 0.0f;
+
+        switch (effectTemplate.duration.magnitudeCalculation)
+        {
+            case EModifierCalculation.ScalableFloat:
+                cachedDuration = effectTemplate.duration.baseMagnitude;
+                break;
+            case EModifierCalculation.AttributeBased:
+                cachedDuration = owner.GetAttributeCurrentValue(effectTemplate.duration.attribute);
+                break;
+            case EModifierCalculation.CustomCalculationClass:
+                if (effectTemplate.duration.customCalculationClass != null)
+                {
+                    cachedDuration = effectTemplate.duration.customCalculationClass.GetModifierMagnitude();
+                }
+                break;
+            case EModifierCalculation.SetByCaller:
+                if (setByCallerValues.ContainsKey(effectTemplate.duration.setByCallerTag))
+                {
+                    cachedDuration = setByCallerValues[effectTemplate.duration.setByCallerTag];
+                }
+                break;
+        }
     }
 
     public void RecalculateModifierMagitudes(AbilitySystem owner)

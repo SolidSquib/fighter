@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc7a4dc0deb5a14c8c05c5ba0168a61, type: 3}
+  m_Name: AIMovement_Walk
+  m_EditorClassIdentifier: 
+  _baseMoveSpeed: 2
+  moveSpeedAttribute: {fileID: 11400000, guid: de91505b0b6f59e4ea9f1f9c14b27c61, type: 2}
+  _gravityScale: 5
+  _fallingState: {fileID: 11400000, guid: d253ed0f6cca3424b822f599119dbf8c, type: 2}

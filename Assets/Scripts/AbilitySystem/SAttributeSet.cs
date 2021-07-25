@@ -208,6 +208,11 @@ public class SAttributeSet : ScriptableObject
             return;
         }
 
+        if (spec.effectTemplate.durationPolicy == EEffectDurationPolicy.Duration)
+        {
+            spec.RecalculateDurationMagnitude(_abilitySystem);
+        }
+
         spec.RecalculateModifierMagitudes(_abilitySystem);
         if (spec.cachedModifiers.Count > 0)
         {

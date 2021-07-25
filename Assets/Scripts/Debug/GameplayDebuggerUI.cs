@@ -67,6 +67,11 @@ public class GameplayDebuggerUI : MonoBehaviour
 
     protected void OnAbilityActivated(SGameplayAbility ability)
     {
+        if (_createdLabels.ContainsKey(ability.GetHashCode()))
+        {
+            return;
+        }
+
         GameObject newLabel = AddNewLabel(ability.name, activeAbilitiesLayout);
         if (newLabel != null)
         {

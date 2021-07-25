@@ -27,6 +27,7 @@ public struct GameplayEventData
 {
     AbilitySystem Source;
     AbilitySystem Target;
+    float magnitude;
 };
 
 public struct ActiveEffectHandle
@@ -115,10 +116,6 @@ public class AbilitySystem : MonoBehaviour, IGameplayTagOwner
         if (playerInput)
         {
             playerInput.onActionTriggered += ProcessInputAction;
-        }
-        else
-        {
-            Debug.LogWarning("No PlayerInput object found on the part of an AbilitySystem. Abilities will not be activated by input.");
         }
 
         _activeGameplayEffects = new ActiveGameplayEffectsContainer(this);
@@ -341,13 +338,17 @@ public class AbilitySystem : MonoBehaviour, IGameplayTagOwner
     private void ActivateAbilitySpec_Internal(ActiveAbilitySpec spec, GameplayEventData payload)
     {
         spec.ability.onAbilityEnded = NotifyAbilityEnded;
-        _dynamicOwnedTags.AddTags(spec.abilityTemplate.activationOwnedTags);
-        
+
+        if (!spec.active)
+        {
+            _dynamicOwnedTags.AddTags(spec.abilityTemplate.activationOwnedTags);
+        }
+
         if (onAbilityActivated != null)
         {
             onAbilityActivated(spec.ability);
         }
-        
+
         spec.ability.ActivateAbility(payload);
     }
 

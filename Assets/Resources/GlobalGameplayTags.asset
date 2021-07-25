@@ -1,5 +1,48 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8713577971715486261
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9488ff22c7852498aa0d21f7b6b5fb, type: 3}
+  m_Name: Event
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -54573944871376683}
+  _children:
+  - {fileID: -3229112910836572214}
+--- !u!114 &-6476048869021822980
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9488ff22c7852498aa0d21f7b6b5fb, type: 3}
+  m_Name: Stunned
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -3158084087456370397}
+  _children: []
+--- !u!114 &-3229112910836572214
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9488ff22c7852498aa0d21f7b6b5fb, type: 3}
+  m_Name: Stagger
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -8713577971715486261}
+  _children: []
 --- !u!114 &-3158084087456370397
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -18,6 +61,7 @@ MonoBehaviour:
   - {fileID: 7167246827903787537}
   - {fileID: 8787445127992453718}
   - {fileID: 606068150580164239}
+  - {fileID: -6476048869021822980}
 --- !u!114 &-2318194874202770557
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -79,6 +123,8 @@ MonoBehaviour:
   - {fileID: -3158084087456370397}
   - {fileID: -2318194874202770557}
   - {fileID: 8666637216102479730}
+  - {fileID: -8713577971715486261}
+  - {fileID: 7713473925963157053}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,6 +149,12 @@ MonoBehaviour:
   - {fileID: 2112796527347332360}
   - {fileID: 8787445127992453718}
   - {fileID: 606068150580164239}
+  - {fileID: -6476048869021822980}
+  - {fileID: -8713577971715486261}
+  - {fileID: -3229112910836572214}
+  - {fileID: 7713473925963157053}
+  - {fileID: 3456031458482894982}
+  - {fileID: 5619253070225433425}
   _root: {fileID: -54573944871376683}
 --- !u!114 &606068150580164239
 MonoBehaviour:
@@ -132,6 +184,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -2318194874202770557}
   _children: []
+--- !u!114 &3456031458482894982
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9488ff22c7852498aa0d21f7b6b5fb, type: 3}
+  m_Name: Duration
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 7713473925963157053}
+  _children: []
+--- !u!114 &5619253070225433425
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9488ff22c7852498aa0d21f7b6b5fb, type: 3}
+  m_Name: Stagger
+  m_EditorClassIdentifier: 
+  _parent: {fileID: 8666637216102479730}
+  _children: []
 --- !u!114 &6245496306291847423
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -160,6 +240,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _parent: {fileID: -3158084087456370397}
   _children: []
+--- !u!114 &7713473925963157053
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e9488ff22c7852498aa0d21f7b6b5fb, type: 3}
+  m_Name: DataTag
+  m_EditorClassIdentifier: 
+  _parent: {fileID: -54573944871376683}
+  _children:
+  - {fileID: 3456031458482894982}
 --- !u!114 &8666637216102479730
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -175,6 +270,7 @@ MonoBehaviour:
   _parent: {fileID: -54573944871376683}
   _children:
   - {fileID: 6245496306291847423}
+  - {fileID: 5619253070225433425}
 --- !u!114 &8787445127992453718
 MonoBehaviour:
   m_ObjectHideFlags: 1

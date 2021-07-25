@@ -44,8 +44,20 @@ public class SpriteAttachments : MonoBehaviour
         }
 
         DeleteAttachments();
-        foreach (SerializedSpriteAttachment attachment in GetAttachments(spriteRenderer.sprite.name))
+
+        var localAttachments = GetAttachments(spriteRenderer.sprite.name);
+        if (localAttachments == null)
         {
+            return;
+        }
+
+        foreach (SerializedSpriteAttachment attachment in localAttachments)
+        {
+            if (attachment == null)
+            {
+                continue;
+            }
+
             GameObject go = new GameObject(attachment.Name);
             SpriteAttachment att = go.AddComponent<SpriteAttachment>();
             go.AddComponent<SpriteAttachmentSnapper>();
@@ -59,6 +71,11 @@ public class SpriteAttachments : MonoBehaviour
     public void DeleteAttachments()
     {
         SpriteAttachment[] found = GetComponentsInChildren<SpriteAttachment>();
+        if (found == null)
+        {
+            return;
+        }
+
         for (int i = 0; i < found.Length; i++)
         {
             DestroyImmediate(found[i].gameObject);
@@ -94,13 +111,13 @@ public class SpriteAttachments : MonoBehaviour
     {
         if (sheet == null)
         {
-            Debug.LogError("[SpriteAttachments] No Sprite Attachment Sheet has been assigned");
+            Debug.LogWarning("[SpriteAttachments] No Sprite Attachment Sheet has been assigned");
             return null;
         }
 
         if (sheet[spriteName] == null)
         {
-            Debug.LogError(string.Format("[SpriteAttachments] Sheet does not contain sprite called '{0}'", spriteName));
+            Debug.LogWarning(string.Format("[SpriteAttachments] Sheet does not contain sprite called '{0}'", spriteName));
             return null;
         }
         return sheet[spriteName].Attachments;

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d12f5b09e2149f449a1be7db5499b8f, type: 3}
+  m_Name: CharacterData_Kim
+  m_EditorClassIdentifier: 
+  _speakerData: {fileID: 11400000, guid: d4e85f220b4812744b458bb780fbd7bf, type: 2}
+  lightAttackCombo: {fileID: 11400000, guid: c04dc00287034aa45879a60df95bcafb, type: 2}
+  heavyAttackCombo: {fileID: 0}
+  staggerAnimation: {fileID: 11400000, guid: 0cddb2a96d658ef4980a42f8d1da71a3, type: 2}
+  stunnedAnimation: {fileID: 11400000, guid: 5106cdb7db9dc4a4e92f1d876ebd8295, type: 2}

@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38d519f4da7ce4d42a3872a43ea1b8e7, type: 3}
+  m_Name: Stagger_GA
+  m_EditorClassIdentifier: 
+  abilityTags:
+    _list: []
+  activationOwnedTags:
+    _list:
+    - {fileID: -6476048869021822980, guid: 8161edde4a7592544a9e29f39e194969, type: 2}
+  activationBlockedTags:
+    _list: []
+  activationRequiredTags:
+    required:
+      _list: []
+    ignored:
+      _list: []
+  cancelAbilitiesWithTags:
+    _list: []
+  blockAbilitiesWithTags:
+    _list:
+    - {fileID: 2112796527347332360, guid: 8161edde4a7592544a9e29f39e194969, type: 2}
+    - {fileID: -2292766013060212101, guid: 8161edde4a7592544a9e29f39e194969, type: 2}
+  retriggerInstancedAbility: 1
+  tagTriggers:
+  - triggerTag: {fileID: -3229112910836572214, guid: 8161edde4a7592544a9e29f39e194969,
+      type: 2}
+    triggerMethod: 0
+  activatedAbilityWhenGranted: 0
+  staggerEffect: {fileID: 11400000, guid: 515136aab3409b745ab3673820a657d5, type: 2}
+  stunDurationTag: {fileID: 3456031458482894982, guid: 8161edde4a7592544a9e29f39e194969,
+    type: 2}
+  stunDurationMagnitude: 1

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e31ae8251cebb74cb4902e00c3bc4a8, type: 3}
+  m_Name: Scott_DefaultLightAttackCombo
+  m_EditorClassIdentifier: 
+  attacks:
+  - {fileID: 11400000, guid: 617eddb27b350cb459c877eb4c4dfc11, type: 2}
+  - {fileID: 11400000, guid: da3f78bf11d844e448f161d9eea4b22e, type: 2}
+  - {fileID: 11400000, guid: 617eddb27b350cb459c877eb4c4dfc11, type: 2}
+  - {fileID: 11400000, guid: e1bc999c0c7734840852ea83d46559ea, type: 2}
+  allowLooping: 0
